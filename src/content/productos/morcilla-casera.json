@@ -1,0 +1,32 @@
+{
+  "id": 16,
+  "nombre": "Morcilla Casera",
+  "descripcion": "Morcilla tradicional preparada con receta familiar, usando los mejores ingredientes naturales. Rellena de arroz, especias y hierbas aromáticas.",
+  "precio": 18000,
+  "imagen": "https://images.unsplash.com/photo-1624471258570-f4e11e5e5c53?w=800&q=80",
+  "categoria": "especialidad",
+  "peso": "400g",
+  "destacado": false,
+  "stock": true,
+  "slug": "morcilla-casera",
+  "nutricion": {
+    "calorias": 275,
+    "proteinas": 15,
+    "grasas": 20,
+    "grasas_saturadas": 8,
+    "hierro": 6.5,
+    "sodio": 680
+  },
+  "preparacion": {
+    "metodo": "Parrilla a fuego bajo",
+    "tiempo": "15-20 minutos, girando suavemente",
+    "temperatura": "75°C interno",
+    "tips": [
+      "Cocinar a fuego muy suave",
+      "No pinchar ni presionar",
+      "Servir con limón y ají"
+    ]
+  },
+  "maridajes": ["Cerveza artesanal", "Limón", "Ají picante", "Arepa boyacense"],
+  "origen": "Receta familiar artesanal"
+}

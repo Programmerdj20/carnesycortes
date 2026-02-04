@@ -1,0 +1,34 @@
+{
+  "id": 1,
+  "nombre": "Ribeye Premium",
+  "descripcion": "Corte premium con excelente marmoleo, perfecto para asados especiales. Proveniente del lomo alto del ganado, su infiltración de grasa garantiza jugosidad y un sabor intenso inigualable.",
+  "precio": 45000,
+  "imagen": "https://images.unsplash.com/photo-1615937722923-67f6deaf2cc9?w=800&q=80",
+  "categoria": "premium",
+  "peso": "400g",
+  "destacado": true,
+  "stock": true,
+  "slug": "ribeye-premium",
+  "nutricion": {
+    "calorias": 250,
+    "proteinas": 26,
+    "grasas": 16,
+    "grasas_saturadas": 7,
+    "hierro": 2.8,
+    "sodio": 65
+  },
+  "preparacion": {
+    "metodo": "Parrilla a fuego medio-alto",
+    "tiempo": "4-5 minutos por lado",
+    "temperatura": "54°C para término medio",
+    "tips": [
+      "Retirar de la nevera 30 minutos antes",
+      "Sellar primero para conservar jugos",
+      "Dejar reposar 5 minutos antes de servir"
+    ]
+  },
+  "maridajes": ["Vino Tinto Malbec", "Chimichurri", "Papas asadas", "Ensalada César"],
+  "origen": "Ganado Nacional Premium",
+  "maduracion": "21 días",
+  "grado": "AAA Premium"
+}

@@ -1,0 +1,34 @@
+{
+  "id": 7,
+  "nombre": "Sobrebarriga",
+  "descripcion": "Corte tradicional colombiano, perfecto para sudados y preparaciones en salsa. Su capa de grasa la mantiene jugosa durante cocciones prolongadas.",
+  "precio": 28000,
+  "imagen": "https://images.unsplash.com/photo-1602473812169-afa558045e3a?w=800&q=80",
+  "categoria": "tradicional",
+  "peso": "600g",
+  "destacado": false,
+  "stock": true,
+  "slug": "sobrebarriga",
+  "nutricion": {
+    "calorias": 240,
+    "proteinas": 22,
+    "grasas": 16,
+    "grasas_saturadas": 7,
+    "hierro": 2.4,
+    "sodio": 62
+  },
+  "preparacion": {
+    "metodo": "Cocción lenta en salsa",
+    "tiempo": "2-3 horas a fuego lento",
+    "temperatura": "90°C cocción lenta",
+    "tips": [
+      "Cocinar con cerveza para más terneza",
+      "Sellar antes de guisar para mejor sabor",
+      "Acompañar con hogao colombiano"
+    ]
+  },
+  "maridajes": ["Cerveza negra", "Hogao", "Arroz blanco", "Papa criolla"],
+  "origen": "Ganado Nacional",
+  "maduracion": "7 días",
+  "grado": "A Estándar"
+}

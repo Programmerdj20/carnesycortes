@@ -1,0 +1,33 @@
+{
+  "id": 12,
+  "nombre": "Combo Romántico",
+  "descripcion": "Dos filetes premium con acompañamientos especiales para cena íntima. Incluye dos filetes de res AAA, espárragos y papa gourmet para 2 personas.",
+  "precio": 95000,
+  "imagen": "https://images.unsplash.com/photo-1432139509613-5c4255a1d197?w=800&q=80",
+  "categoria": "combo",
+  "peso": "800g",
+  "destacado": false,
+  "stock": true,
+  "slug": "combo-romantico",
+  "nutricion": {
+    "calorias": 215,
+    "proteinas": 28,
+    "grasas": 11,
+    "grasas_saturadas": 4.5,
+    "hierro": 3.0,
+    "sodio": 52
+  },
+  "preparacion": {
+    "metodo": "Sartén de hierro fundido",
+    "tiempo": "15-20 minutos total",
+    "temperatura": "54°C para término medio",
+    "tips": [
+      "Usar mantequilla con ajo y romero",
+      "Acompañar con velas y buen vino",
+      "Servir en platos precalentados"
+    ]
+  },
+  "maridajes": ["Vino Tinto Pinot Noir", "Salsa de vino tinto", "Espárragos al horno", "Puré trufado"],
+  "origen": "Ganado Angus Premium",
+  "grado": "AAA Premium"
+}

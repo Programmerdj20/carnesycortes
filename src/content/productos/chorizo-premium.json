@@ -1,0 +1,32 @@
+{
+  "id": 15,
+  "nombre": "Chorizo Premium",
+  "descripcion": "Chorizos artesanales de la casa, preparados con nuestra mezcla especial de especias y carne seleccionada. Sabor ahumado y textura perfecta.",
+  "precio": 25000,
+  "imagen": "https://images.unsplash.com/photo-1555484937-58e5e4ef4b1d?w=800&q=80",
+  "categoria": "especialidad",
+  "peso": "500g",
+  "destacado": false,
+  "stock": true,
+  "slug": "chorizo-premium",
+  "nutricion": {
+    "calorias": 300,
+    "proteinas": 18,
+    "grasas": 25,
+    "grasas_saturadas": 10,
+    "hierro": 2.0,
+    "sodio": 850
+  },
+  "preparacion": {
+    "metodo": "Parrilla a fuego medio",
+    "tiempo": "10-15 minutos, girando frecuentemente",
+    "temperatura": "75°C interno",
+    "tips": [
+      "No pinchar para mantener los jugos",
+      "Cocinar a fuego medio para que no se quemen",
+      "Servir con arepa y limón"
+    ]
+  },
+  "maridajes": ["Cerveza lager", "Arepa", "Limón", "Ají casero"],
+  "origen": "Producción artesanal propia"
+}

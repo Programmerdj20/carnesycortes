@@ -1,0 +1,34 @@
+{
+  "id": 13,
+  "nombre": "Costillas BBQ",
+  "descripcion": "Costillas de res tiernas, perfectas para barbacoa. Cocción lenta que permite que la carne se separe del hueso con facilidad y absorba todos los sabores.",
+  "precio": 42000,
+  "imagen": "https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80",
+  "categoria": "especialidad",
+  "peso": "1kg",
+  "destacado": false,
+  "stock": true,
+  "slug": "costillas-bbq",
+  "nutricion": {
+    "calorias": 280,
+    "proteinas": 22,
+    "grasas": 21,
+    "grasas_saturadas": 9,
+    "hierro": 2.3,
+    "sodio": 75
+  },
+  "preparacion": {
+    "metodo": "Ahumado o horno bajo",
+    "tiempo": "3-4 horas a fuego lento",
+    "temperatura": "110°C cocción lenta",
+    "tips": [
+      "Aplicar rub seco la noche anterior",
+      "Envolver en aluminio a mitad de cocción",
+      "Glasear con salsa BBQ los últimos 20 min"
+    ]
+  },
+  "maridajes": ["Cerveza IPA", "Salsa BBQ ahumada", "Coleslaw", "Pan de maíz"],
+  "origen": "Ganado Nacional",
+  "maduracion": "7 días",
+  "grado": "AA"
+}

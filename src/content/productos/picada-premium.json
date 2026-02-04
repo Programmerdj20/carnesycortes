@@ -1,0 +1,33 @@
+{
+  "id": 9,
+  "nombre": "Picada Premium",
+  "descripcion": "Selección de los mejores cortes para compartir. Incluye ribeye, chorizo, morcilla, punta de anca y costilla, ideal para 4-6 personas.",
+  "precio": 120000,
+  "imagen": "https://images.unsplash.com/photo-1529694157872-4e0c0f3b238b?w=800&q=80",
+  "categoria": "combo",
+  "peso": "2kg",
+  "destacado": false,
+  "stock": true,
+  "slug": "picada-premium",
+  "nutricion": {
+    "calorias": 230,
+    "proteinas": 25,
+    "grasas": 14,
+    "grasas_saturadas": 6,
+    "hierro": 2.8,
+    "sodio": 65
+  },
+  "preparacion": {
+    "metodo": "Parrilla mixta",
+    "tiempo": "30-45 minutos total",
+    "temperatura": "Varía según corte",
+    "tips": [
+      "Empezar por los cortes más gruesos",
+      "Los embutidos van al final",
+      "Servir en tabla de madera para mejor presentación"
+    ]
+  },
+  "maridajes": ["Vino Tinto Malbec", "Chimichurri", "Guacamole", "Cerveza artesanal"],
+  "origen": "Selección mixta nacional",
+  "grado": "AA-AAA Mixto"
+}

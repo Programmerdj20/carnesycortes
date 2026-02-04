@@ -1,0 +1,34 @@
+{
+  "id": 5,
+  "nombre": "Lomo de Res",
+  "descripcion": "Corte tierno y magro, ideal para bistecs y asados. Su versatilidad lo hace perfecto tanto para preparaciones rápidas como para cocciones lentas.",
+  "precio": 38000,
+  "imagen": "https://images.unsplash.com/photo-1603048297172-c92544798d5a?w=800&q=80",
+  "categoria": "tradicional",
+  "peso": "500g",
+  "destacado": false,
+  "stock": true,
+  "slug": "lomo-de-res",
+  "nutricion": {
+    "calorias": 190,
+    "proteinas": 30,
+    "grasas": 7,
+    "grasas_saturadas": 3,
+    "hierro": 3.2,
+    "sodio": 50
+  },
+  "preparacion": {
+    "metodo": "Plancha o sartén a fuego alto",
+    "tiempo": "3-4 minutos por lado",
+    "temperatura": "55°C para término medio",
+    "tips": [
+      "Cortar en medallones de 3cm de grosor",
+      "Ideal marinado con ajo y hierbas",
+      "No sobrecocinar para mantener jugosidad"
+    ]
+  },
+  "maridajes": ["Vino Tinto joven", "Salsa criolla", "Arroz con frijoles", "Plátano maduro"],
+  "origen": "Ganado Nacional",
+  "maduracion": "14 días",
+  "grado": "AA Selecto"
+}

@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guía para Claude Code en el repositorio de Carnes & Cortes.
 
 ## Comandos de Desarrollo
 
@@ -13,61 +13,81 @@ npm run build
 
 # Preview del build de producción
 npm run preview
-
-# Comandos CLI de Astro
-npm run astro
 ```
-
-## Stack Tecnológico
-
-- **Framework:** Astro 5.13.2
-- **Estilos:** Tailwind CSS 3.4.17 con configuración personalizada extensa
-- **Tipado:** TypeScript con configuración estricta
-- **Fuentes:** Google Fonts (Inter)
 
 ## Arquitectura del Proyecto
 
-### Estructura Principal
-- `src/layouts/Layout.astro` - Layout base con header global, footer y sistema de carrito compartido
-- `src/pages/index.astro` - Página principal con hero, productos destacados y modales
-- `src/pages/tienda.astro` - Catálogo completo con filtros y carrito lateral
-- `src/styles/global.css` - Estilos globales mínimos
-- `Assets/` - Imágenes y recursos del sitio
+### Archivos principales
+- `src/layouts/Layout.astro` — Layout base: importa Header/Footer, modal de carrito global y funciones JS del carrito
+- `src/pages/index.astro` — Página principal: hero cinematográfico, categorías, productos destacados, banner promo, trust section, testimonios, CTA
+- `src/pages/tienda.astro` — Catálogo con filtros tipo pills, ordenamiento, cards con link a página de producto
+- `src/pages/producto/[...slug].astro` — Página individual de producto con galería, nutrición, preparación, maridajes, productos relacionados
+- `src/content/productos/*.json` — Fuente de verdad de productos (Content Collections)
+- `src/content/config.ts` — Schema Zod para validación de productos
+- `src/styles/global.css` — Smooth scroll, reveal-on-scroll, parallax
+- `tailwind.config.mjs` — Colores (`brand-red`, `dark`, `cream`, `gold`), fuentes (`Inter` + `Playfair Display`), animaciones custom, shadows premium
+
+### Componentes
+- `src/components/Header.astro` — Header con glassmorphism, scroll effect (transparente → sólido), mobile drawer
+- `src/components/Footer.astro` — Footer 4 columnas con CTA WhatsApp, redes sociales, trust badges
+- `src/components/ProductCard.astro` — Card reutilizable con badge categoría, hover effects, botón agregar vía data attributes
+- `src/components/Breadcrumb.astro` — Navegación breadcrumb
+- `src/components/NutritionTable.astro` — Tabla de información nutricional
+- `src/components/TestimonialCard.astro` — Card de testimonio con rating estrellas
+- `src/components/ProductImage.astro` — Imágenes responsivas con WebP y fallback JPG
 
 ### Sistema de Carrito Global
-El carrito de compras es **global y persistente** usando localStorage:
-- Funciones globales disponibles en todas las páginas: `agregarAlCarrito()`, `eliminarDelCarrito()`, `actualizarContadorCarrito()`
-- Estado compartido entre `index.astro` y `tienda.astro`
-- Integración con WhatsApp para envío de pedidos
-- Modal de carrito accesible desde header global
 
-### Configuración de Tailwind
-El proyecto usa una configuración muy extensa de Tailwind (`tailwind.config.mjs`) con:
-- Colores de marca personalizados (`brand-red`, `dark`)
-- Animaciones custom (`gradient-flow`, `float-up-down`, `slide-in-left/right`, etc.)
-- Keyframes personalizados para efectos visuales
-- Fuente Inter como tipografía principal
+El carrito es persistente entre páginas usando `localStorage` (key: `'carrito'`).
 
-### Gestión de Productos
-- Productos **hardcodeados** en frontmatter de cada página
-- Categorías: `premium`, `tradicional`, `combo`, `especial`, `especialidad`
-- Estructura completa: nombre, descripción, precio, peso, imagen, categoría
+**Flujo de datos:**
+1. `Layout.astro` define funciones globales en `window`: `addToGlobalCart()`, `updateGlobalQuantity()`, `toggleGlobalCart()`, `sendGlobalWhatsAppOrder()`, `updateGlobalCartDisplay()`, `showNotification()`
+2. Las páginas usan botones con clase `.add-to-cart-btn` y data attributes — Layout.astro maneja los clicks vía event delegation
+3. La página de producto (`[...slug].astro`) tiene su propia función con selector de cantidad
+4. El estado vive en `window.globalCart` (sincronizado con localStorage)
+5. El modal slide-in desde la derecha se actualiza vía `updateGlobalCartDisplay()`
+6. Checkout envía pedido formateado por WhatsApp
 
-### Patrones de Código
-- **Español** para contenido, comentarios y variables de negocio
-- **JavaScript vanilla** para interactividad (no frameworks adicionales)
-- **Mobile-first** approach con diseño completamente responsivo
-- **Componentes en Astro** siguiendo las convenciones del framework
+**Estructura de item en carrito:** `{id, nombre, precio, imagen, peso, slug, cantidad}`
 
-### Scripts y Funcionalidad
-- Navegación responsiva con menú hamburguesa
-- Smooth scrolling para enlaces internos
-- Animaciones CSS complejas definidas en configuración Tailwind
-- Sistema de filtros por categoría en página de tienda
-- Estados de hover y transiciones fluidas
+### Gestión de Productos (Content Collections)
 
-### Consideraciones de Desarrollo
-- Layout.astro contiene toda la estructura base y debe modificarse para cambios globales
-- El carrito usa eventos DOM para comunicación entre páginas
-- Imágenes en carpeta `Assets/` con naming descriptivo
-- SEO configurado con meta tags y Open Graph en Layout.astro
+Archivos JSON en `src/content/productos/` validados con Zod:
+
+```typescript
+{
+  id: number,
+  nombre: string,
+  descripcion: string,
+  precio: number,
+  imagen: string,        // URL de imagen (Unsplash placeholders por ahora)
+  categoria: "premium" | "tradicional" | "combo" | "especial" | "especialidad",
+  peso: string,
+  destacado?: boolean,   // default: false
+  stock?: boolean,       // default: true
+  slug: string,          // URL amigable para páginas individuales
+  nutricion?: { calorias, proteinas, grasas, grasas_saturadas?, hierro?, sodio? },
+  preparacion?: { metodo, tiempo, temperatura, tips?: string[] },
+  maridajes?: string[],
+  origen?: string,
+  maduracion?: string,
+  grado?: string,
+}
+```
+
+- Se resuelve en **build-time** (cero overhead en runtime)
+- Agregar producto: crear JSON en `src/content/productos/nombre-producto.json`
+- El `slug` se usa para la ruta `/producto/[slug]`
+- Imágenes: Unsplash placeholders actualmente; reemplazar con fotos reales cuando estén disponibles
+
+## Consideraciones de Desarrollo
+
+- **Idioma**: Español para contenido, comentarios y variables de negocio
+- **JS**: Vanilla en tags `<script>` de Astro, sin frameworks adicionales
+- **Diseño**: Mobile-first con Tailwind, tipografía display Playfair Display + Inter para cuerpo
+- **Imágenes**: URLs de Unsplash como placeholders. Lazy-loaded excepto hero
+- **Cambios globales** (header, footer, carrito): modificar `Layout.astro`, `Header.astro`, `Footer.astro`
+- **WhatsApp**: Número configurado en varios archivos (buscar `5573001234567`)
+- **SEO**: Meta tags y Open Graph configurados en `Layout.astro`
+- **Animaciones**: Intersection Observer para reveal-on-scroll (configurado en Layout.astro), stagger-children para animaciones escalonadas
+- **Filtros de tienda**: Los filtros de categoría aceptan query param `?cat=` para linking directo desde categorías de la home

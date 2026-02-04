@@ -1,0 +1,173 @@
+---
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '/' } = Astro.props;
+
+const navLinks = [
+  { href: '/', label: 'Inicio' },
+  { href: '/tienda', label: 'Tienda' },
+];
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" id="mainHeader">
+  <nav class="py-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between">
+        <!-- Logo -->
+        <a href="/" class="block flex-shrink-0">
+          <img src="/Assets/Logo cc.png" alt="Carnes & Cortes" class="h-10 sm:h-12 w-auto transition-transform duration-300 hover:scale-105" />
+        </a>
+
+        <!-- Nav Central -->
+        <div class="hidden md:flex items-center space-x-8" id="navMenu">
+          {navLinks.map(link => (
+            <a href={link.href}
+               class:list={[
+                 'font-medium transition-colors duration-300 relative group text-sm uppercase tracking-wider',
+                 currentPath === link.href ? 'text-brand-red' : 'nav-link-color'
+               ]}>
+              {link.label}
+              <span class:list={[
+                'absolute -bottom-1 left-0 h-0.5 bg-brand-red transition-all duration-300',
+                currentPath === link.href ? 'w-full' : 'w-0 group-hover:w-full'
+              ]}></span>
+            </a>
+          ))}
+        </div>
+
+        <!-- Derecha: Carrito + CTA -->
+        <div class="flex items-center space-x-3 sm:space-x-4">
+          <!-- Carrito -->
+          <button class="relative p-2 border-2 border-brand-red text-brand-red rounded-full hover:bg-brand-red hover:text-white transition-all duration-300" id="cartBtn" aria-label="Abrir carrito">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+            </svg>
+            <span class="absolute -top-2 -right-2 bg-brand-red text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold" id="cartCount">0</span>
+          </button>
+
+          <!-- CTA -->
+          <a href="/tienda"
+             class="hidden sm:inline-flex items-center gap-2 bg-brand-red text-white px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-brand-red-dark transition-all duration-300 hover:-translate-y-0.5 shadow-red-glow">
+            Hacer Pedido
+          </a>
+
+          <!-- Mobile menu toggle -->
+          <button class="md:hidden flex flex-col p-2 space-y-1.5 focus:outline-none" id="menuToggle" aria-label="Menú">
+            <span class="menu-bar w-6 h-0.5 bg-current transition-all duration-300 origin-center"></span>
+            <span class="menu-bar w-6 h-0.5 bg-current transition-all duration-300"></span>
+            <span class="menu-bar w-6 h-0.5 bg-current transition-all duration-300 origin-center"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer -->
+  <div id="mobileDrawer" class="md:hidden fixed inset-0 top-0 z-40 pointer-events-none">
+    <div class="absolute inset-0 bg-black/60 opacity-0 transition-opacity duration-300" id="drawerOverlay"></div>
+    <div class="absolute right-0 top-0 h-full w-72 bg-white shadow-2xl transform translate-x-full transition-transform duration-300" id="drawerPanel">
+      <div class="pt-20 px-6 pb-8">
+        <div class="space-y-1">
+          {navLinks.map(link => (
+            <a href={link.href}
+               class:list={[
+                 'block py-3 px-4 rounded-lg font-medium transition-colors duration-200 text-lg',
+                 currentPath === link.href ? 'bg-brand-red/10 text-brand-red' : 'text-gray-700 hover:bg-gray-50'
+               ]}>
+              {link.label}
+            </a>
+          ))}
+        </div>
+        <div class="mt-8 pt-6 border-t border-gray-200">
+          <a href="/tienda"
+             class="flex items-center justify-center gap-2 bg-brand-red text-white px-6 py-3 rounded-full font-semibold hover:bg-brand-red-dark transition-colors">
+            Hacer Pedido
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  /* Header states */
+  #mainHeader {
+    background: transparent;
+  }
+  #mainHeader .nav-link-color {
+    color: white;
+  }
+  #mainHeader #menuToggle {
+    color: white;
+  }
+  #mainHeader.scrolled {
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(196, 30, 58, 0.1);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+  #mainHeader.scrolled .nav-link-color {
+    color: #374151;
+  }
+  #mainHeader.scrolled .nav-link-color:hover {
+    color: #C41E3A;
+  }
+  #mainHeader.scrolled #menuToggle {
+    color: #374151;
+  }
+
+  /* Mobile menu animation */
+  #mobileDrawer.open {
+    pointer-events: auto;
+  }
+  #mobileDrawer.open #drawerOverlay {
+    opacity: 1;
+  }
+  #mobileDrawer.open #drawerPanel {
+    transform: translateX(0);
+  }
+
+  /* Hamburger animation */
+  #menuToggle.active .menu-bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  #menuToggle.active .menu-bar:nth-child(2) {
+    opacity: 0;
+  }
+  #menuToggle.active .menu-bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+</style>
+
+<script>
+  const header = document.getElementById('mainHeader');
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileDrawer = document.getElementById('mobileDrawer');
+  const drawerOverlay = document.getElementById('drawerOverlay');
+
+  // Scroll effect
+  function handleScroll() {
+    if (window.scrollY > 50) {
+      header?.classList.add('scrolled');
+    } else {
+      header?.classList.remove('scrolled');
+    }
+  }
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  handleScroll();
+
+  // Mobile menu
+  menuToggle?.addEventListener('click', () => {
+    menuToggle.classList.toggle('active');
+    mobileDrawer?.classList.toggle('open');
+    document.body.style.overflow = mobileDrawer?.classList.contains('open') ? 'hidden' : '';
+  });
+
+  drawerOverlay?.addEventListener('click', () => {
+    menuToggle?.classList.remove('active');
+    mobileDrawer?.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+</script>

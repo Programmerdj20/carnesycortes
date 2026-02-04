@@ -1,0 +1,34 @@
+{
+  "id": 2,
+  "nombre": "Filete de Res",
+  "descripcion": "El corte más tierno y refinado, ideal para los paladares más exigentes. Bajo en grasa y con una textura suave que se deshace en la boca.",
+  "precio": 52000,
+  "imagen": "https://images.unsplash.com/photo-1588168333986-5078d3ae3976?w=800&q=80",
+  "categoria": "premium",
+  "peso": "350g",
+  "destacado": true,
+  "stock": true,
+  "slug": "filete-de-res",
+  "nutricion": {
+    "calorias": 218,
+    "proteinas": 28,
+    "grasas": 11,
+    "grasas_saturadas": 4.5,
+    "hierro": 3.1,
+    "sodio": 55
+  },
+  "preparacion": {
+    "metodo": "Sartén de hierro fundido",
+    "tiempo": "3-4 minutos por lado",
+    "temperatura": "52°C para término medio-rojo",
+    "tips": [
+      "Secar bien la superficie antes de cocinar",
+      "Usar mantequilla y hierbas al final",
+      "No pinchar el filete durante la cocción"
+    ]
+  },
+  "maridajes": ["Vino Tinto Cabernet Sauvignon", "Salsa de pimienta", "Espárragos grillados", "Puré de papa"],
+  "origen": "Ganado Angus Nacional",
+  "maduracion": "28 días",
+  "grado": "AAA Premium"
+}

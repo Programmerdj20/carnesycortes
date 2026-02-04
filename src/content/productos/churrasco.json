@@ -1,0 +1,34 @@
+{
+  "id": 6,
+  "nombre": "Churrasco",
+  "descripcion": "Clásico corte para parrilla, jugoso y sabroso. Su textura fibrosa absorbe perfectamente los adobos y marinados, resultando en un sabor incomparable.",
+  "precio": 35000,
+  "imagen": "https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80",
+  "categoria": "tradicional",
+  "peso": "450g",
+  "destacado": false,
+  "stock": true,
+  "slug": "churrasco",
+  "nutricion": {
+    "calorias": 220,
+    "proteinas": 26,
+    "grasas": 12,
+    "grasas_saturadas": 5,
+    "hierro": 2.9,
+    "sodio": 58
+  },
+  "preparacion": {
+    "metodo": "Parrilla a carbón",
+    "tiempo": "6-8 minutos por lado",
+    "temperatura": "60°C para término medio",
+    "tips": [
+      "Marinar mínimo 2 horas antes",
+      "Usar carbón de leña para mejor sabor",
+      "Cortar en contra de la fibra al servir"
+    ]
+  },
+  "maridajes": ["Cerveza artesanal", "Chimichurri casero", "Yuca frita", "Guacamole"],
+  "origen": "Ganado Nacional",
+  "maduracion": "14 días",
+  "grado": "AA"
+}

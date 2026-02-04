@@ -1,0 +1,34 @@
+{
+  "id": 4,
+  "nombre": "Tomahawk Steak",
+  "descripcion": "Corte espectacular para ocasiones especiales. Su hueso largo de costilla y abundante marmoleo lo convierten en una pieza de presentación única e inolvidable.",
+  "precio": 85000,
+  "imagen": "https://images.unsplash.com/photo-1558030006-450675393462?w=800&q=80",
+  "categoria": "especial",
+  "peso": "1200g",
+  "destacado": true,
+  "stock": true,
+  "slug": "tomahawk-steak",
+  "nutricion": {
+    "calorias": 260,
+    "proteinas": 24,
+    "grasas": 18,
+    "grasas_saturadas": 8,
+    "hierro": 2.5,
+    "sodio": 70
+  },
+  "preparacion": {
+    "metodo": "Searing reverse en horno + parrilla",
+    "tiempo": "45 min horno + 3 min por lado parrilla",
+    "temperatura": "55°C para término medio",
+    "tips": [
+      "Cocinar primero en horno a 120°C",
+      "Finalizar con searing en parrilla muy caliente",
+      "Cubrir el hueso con aluminio para que no se queme"
+    ]
+  },
+  "maridajes": ["Vino Tinto Reserva", "Sal de mar ahumada", "Verduras grilladas", "Vino Malbec Gran Reserva"],
+  "origen": "Ganado Angus Premium",
+  "maduracion": "30 días",
+  "grado": "AAA Extra Premium"
+}

@@ -1,0 +1,33 @@
+{
+  "id": 10,
+  "nombre": "Asado Familiar",
+  "descripcion": "Kit completo para asado familiar con acompañamientos. Incluye punta de anca, churrasco, chorizo, morcilla y costillas para 6-8 personas.",
+  "precio": 150000,
+  "imagen": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80",
+  "categoria": "combo",
+  "peso": "3kg",
+  "destacado": false,
+  "stock": true,
+  "slug": "asado-familiar",
+  "nutricion": {
+    "calorias": 225,
+    "proteinas": 24,
+    "grasas": 14,
+    "grasas_saturadas": 6,
+    "hierro": 2.7,
+    "sodio": 63
+  },
+  "preparacion": {
+    "metodo": "Parrilla a carbón",
+    "tiempo": "1-2 horas total",
+    "temperatura": "Varía según corte",
+    "tips": [
+      "Encender carbón 30 min antes",
+      "Organizar por tiempos de cocción",
+      "Mantener brasas uniformes"
+    ]
+  },
+  "maridajes": ["Vino Tinto", "Cerveza", "Limonada natural", "Chimichurri y salsas variadas"],
+  "origen": "Selección mixta nacional",
+  "grado": "AA Selecto"
+}

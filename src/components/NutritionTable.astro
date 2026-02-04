@@ -1,0 +1,42 @@
+---
+interface Props {
+  nutricion: {
+    calorias: number;
+    proteinas: number;
+    grasas: number;
+    grasas_saturadas?: number;
+    hierro?: number;
+    sodio?: number;
+  };
+}
+
+const { nutricion } = Astro.props;
+
+const items = [
+  { label: 'Calorías', value: `${nutricion.calorias} kcal`, icon: '🔥' },
+  { label: 'Proteínas', value: `${nutricion.proteinas}g`, icon: '💪' },
+  { label: 'Grasas', value: `${nutricion.grasas}g`, icon: '🥑' },
+  ...(nutricion.grasas_saturadas !== undefined ? [{ label: 'Grasas Saturadas', value: `${nutricion.grasas_saturadas}g`, icon: '📊' }] : []),
+  ...(nutricion.hierro !== undefined ? [{ label: 'Hierro', value: `${nutricion.hierro}mg`, icon: '🩸' }] : []),
+  ...(nutricion.sodio !== undefined ? [{ label: 'Sodio', value: `${nutricion.sodio}mg`, icon: '🧂' }] : []),
+];
+---
+
+<div class="bg-gray-50 rounded-2xl p-6">
+  <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+    <svg class="w-5 h-5 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+    </svg>
+    Información Nutricional
+    <span class="text-sm font-normal text-gray-500">(por 100g)</span>
+  </h3>
+  <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+    {items.map(item => (
+      <div class="bg-white rounded-xl p-3 text-center border border-gray-100">
+        <span class="text-lg block mb-1">{item.icon}</span>
+        <span class="text-lg font-bold text-gray-900 block">{item.value}</span>
+        <span class="text-xs text-gray-500">{item.label}</span>
+      </div>
+    ))}
+  </div>
+</div>

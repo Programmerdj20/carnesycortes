@@ -1,0 +1,33 @@
+{
+  "id": 11,
+  "nombre": "Parrillada Ejecutiva",
+  "descripcion": "Combo especial para reuniones de trabajo o celebraciones. Incluye ribeye, filete, entraña, chorizo premium, y acompañamientos selectos para 8-10 personas.",
+  "precio": 200000,
+  "imagen": "https://images.unsplash.com/photo-1558030137-a56c1b004273?w=800&q=80",
+  "categoria": "combo",
+  "peso": "4kg",
+  "destacado": false,
+  "stock": true,
+  "slug": "parrillada-ejecutiva",
+  "nutricion": {
+    "calorias": 240,
+    "proteinas": 26,
+    "grasas": 15,
+    "grasas_saturadas": 6.5,
+    "hierro": 2.9,
+    "sodio": 60
+  },
+  "preparacion": {
+    "metodo": "Parrilla profesional",
+    "tiempo": "1.5-2.5 horas total",
+    "temperatura": "Varía según corte",
+    "tips": [
+      "Usar termómetro para cada corte",
+      "Los cortes premium van al final para servir al punto",
+      "Preparar tabla de presentación"
+    ]
+  },
+  "maridajes": ["Vino Tinto Reserva", "Whisky", "Ensalada gourmet", "Pan artesanal"],
+  "origen": "Selección Premium Nacional",
+  "grado": "AAA Premium"
+}

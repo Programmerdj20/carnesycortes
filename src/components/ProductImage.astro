@@ -1,0 +1,109 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  loading?: 'lazy' | 'eager';
+  class?: string;
+  width?: number;
+  height?: number;
+}
+
+const { src, alt, loading = 'lazy', class: className = '', width = 800, height = 800 } = Astro.props;
+
+// Función para agregar sufijo de resolución a las URLs
+const getResponsiveImages = (baseUrl: string) => {
+  if (!baseUrl.includes('http')) {
+    // Si no es una URL externa, devolver como está
+    return baseUrl;
+  }
+
+  return {
+    mobile: `${baseUrl}-400`,
+    tablet: `${baseUrl}-600`,
+    desktop: `${baseUrl}-800`,
+    retina: `${baseUrl}-1600`,
+  };
+};
+
+const responsiveImages = getResponsiveImages(src);
+const isResponsive = typeof responsiveImages === 'object';
+---
+
+{isResponsive ? (
+  <picture>
+    {/* Desktop Retina (2x) */}
+    <source
+      media="(min-width: 1200px) and (min-device-pixel-ratio: 2)"
+      srcset={`${responsiveImages.retina}.webp`}
+      type="image/webp"
+    />
+    <source
+      media="(min-width: 1200px) and (min-device-pixel-ratio: 2)"
+      srcset={`${responsiveImages.retina}.jpg`}
+      type="image/jpeg"
+    />
+
+    {/* Desktop */}
+    <source
+      media="(min-width: 1200px)"
+      srcset={`${responsiveImages.desktop}.webp`}
+      type="image/webp"
+    />
+    <source
+      media="(min-width: 1200px)"
+      srcset={`${responsiveImages.desktop}.jpg`}
+      type="image/jpeg"
+    />
+
+    {/* Tablet */}
+    <source
+      media="(min-width: 768px)"
+      srcset={`${responsiveImages.tablet}.webp`}
+      type="image/webp"
+    />
+    <source
+      media="(min-width: 768px)"
+      srcset={`${responsiveImages.tablet}.jpg`}
+      type="image/jpeg"
+    />
+
+    {/* Mobile */}
+    <source
+      srcset={`${responsiveImages.mobile}.webp`}
+      type="image/webp"
+    />
+    <source
+      srcset={`${responsiveImages.mobile}.jpg`}
+      type="image/jpeg"
+    />
+
+    {/* Fallback */}
+    <img
+      src={`${responsiveImages.desktop}.jpg`}
+      alt={alt}
+      loading={loading}
+      decoding="async"
+      width={width}
+      height={height}
+      class={className}
+    />
+  </picture>
+) : (
+  <img
+    src={src}
+    alt={alt}
+    loading={loading}
+    decoding="async"
+    width={width}
+    height={height}
+    class={className}
+  />
+)}
+
+<style>
+  picture img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

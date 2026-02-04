@@ -1,0 +1,34 @@
+{
+  "id": 14,
+  "nombre": "Entraña",
+  "descripcion": "Corte jugoso y sabroso, favorito de los asadores. Su textura única y sabor intenso la convierten en una de las estrellas indiscutibles de cualquier parrillada.",
+  "precio": 40000,
+  "imagen": "https://images.unsplash.com/photo-1504973960431-1c1c6819edf0?w=800&q=80",
+  "categoria": "especialidad",
+  "peso": "500g",
+  "destacado": false,
+  "stock": true,
+  "slug": "entranya",
+  "nutricion": {
+    "calorias": 230,
+    "proteinas": 27,
+    "grasas": 13,
+    "grasas_saturadas": 5.5,
+    "hierro": 3.5,
+    "sodio": 58
+  },
+  "preparacion": {
+    "metodo": "Parrilla a fuego fuerte",
+    "tiempo": "3-4 minutos por lado",
+    "temperatura": "52°C para término medio-rojo",
+    "tips": [
+      "Cocinar a fuego muy fuerte y rápido",
+      "No pasar de término medio",
+      "Cortar en diagonal contra la fibra"
+    ]
+  },
+  "maridajes": ["Vino Tinto Malbec", "Limón", "Chimichurri picante", "Papas fritas rústicas"],
+  "origen": "Ganado Nacional",
+  "maduracion": "14 días",
+  "grado": "AA Selecto"
+}

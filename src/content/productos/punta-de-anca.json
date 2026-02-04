@@ -1,0 +1,34 @@
+{
+  "id": 8,
+  "nombre": "Punta de Anca",
+  "descripcion": "Corte versátil, excelente para asados y guisados. Con su capa de grasa externa, se logra una costra crujiente y un interior jugoso perfectos.",
+  "precio": 32000,
+  "imagen": "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=800&q=80",
+  "categoria": "tradicional",
+  "peso": "500g",
+  "destacado": false,
+  "stock": true,
+  "slug": "punta-de-anca",
+  "nutricion": {
+    "calorias": 210,
+    "proteinas": 25,
+    "grasas": 12,
+    "grasas_saturadas": 5,
+    "hierro": 2.7,
+    "sodio": 55
+  },
+  "preparacion": {
+    "metodo": "Horno o parrilla",
+    "tiempo": "25-30 min en horno a 180°C",
+    "temperatura": "63°C para término medio-bien",
+    "tips": [
+      "Dejar la grasa hacia arriba en el horno",
+      "Bañar con sus jugos cada 10 minutos",
+      "Dejar reposar 10 minutos antes de cortar"
+    ]
+  },
+  "maridajes": ["Vino Tinto Merlot", "Salsa BBQ casera", "Mazorca asada", "Ensalada fresca"],
+  "origen": "Ganado Nacional",
+  "maduracion": "14 días",
+  "grado": "AA Selecto"
+}
