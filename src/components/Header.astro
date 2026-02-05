@@ -15,9 +15,9 @@ const navLinks = [
   <nav class="py-4">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between">
-        <!-- Logo -->
-        <a href="/" class="block flex-shrink-0">
-          <img src="/Assets/Logo cc.png" alt="Carnes & Cortes" class="h-10 sm:h-12 w-auto transition-transform duration-300 hover:scale-105" />
+        <!-- Logo prominente: sobresale del navbar por debajo -->
+        <a href="/" class="logo-link relative z-10 block flex-shrink-0">
+          <img src="/Assets/Logo cc.png" alt="Carnes & Cortes" class="logo-img h-20 sm:h-24 w-auto transition-all duration-500 hover:scale-105 drop-shadow-lg" />
         </a>
 
         <!-- Nav Central -->
@@ -40,11 +40,11 @@ const navLinks = [
         <!-- Derecha: Carrito + CTA -->
         <div class="flex items-center space-x-3 sm:space-x-4">
           <!-- Carrito -->
-          <button class="relative p-2 border-2 border-brand-red text-brand-red rounded-full hover:bg-brand-red hover:text-white transition-all duration-300" id="cartBtn" aria-label="Abrir carrito">
-            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+          <button class="relative p-2 cart-icon-color hover:text-brand-red transition-colors duration-300" id="cartBtn" aria-label="Abrir carrito">
+            <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2 3h2l.5 3h15l-1.5 9H6.5L5 6M9 21a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/>
             </svg>
-            <span class="absolute -top-2 -right-2 bg-brand-red text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold" id="cartCount">0</span>
+            <span class="absolute -top-1 -right-1 bg-brand-red text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold" id="cartCount">0</span>
           </button>
 
           <!-- CTA -->
@@ -92,11 +92,40 @@ const navLinks = [
 </header>
 
 <style>
+  /* Logo prominente que sobresale del navbar */
+  .logo-link {
+    margin-top: -0.25rem;
+    margin-bottom: -2.5rem; /* sobresale hacia abajo */
+  }
+  .logo-img {
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+  }
+
+  /* Cuando scrolled, logo un poco más chico */
+  #mainHeader.scrolled .logo-img {
+    height: 4.5rem; /* h-18 aprox */
+  }
+  #mainHeader.scrolled .logo-link {
+    margin-bottom: -1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    #mainHeader.scrolled .logo-img {
+      height: 5rem;
+    }
+    #mainHeader.scrolled .logo-link {
+      margin-bottom: -1.75rem;
+    }
+  }
+
   /* Header states */
   #mainHeader {
     background: transparent;
   }
   #mainHeader .nav-link-color {
+    color: white;
+  }
+  #mainHeader .cart-icon-color {
     color: white;
   }
   #mainHeader #menuToggle {
@@ -113,6 +142,9 @@ const navLinks = [
   }
   #mainHeader.scrolled .nav-link-color:hover {
     color: #C41E3A;
+  }
+  #mainHeader.scrolled .cart-icon-color {
+    color: #374151;
   }
   #mainHeader.scrolled #menuToggle {
     color: #374151;
