@@ -2026,6 +2026,12 @@ video {
 .text-white\/75 {
   color: rgb(255 255 255 / 0.75);
 }
+.underline {
+  text-decoration-line: underline;
+}
+.underline-offset-2 {
+  text-underline-offset: 2px;
+}
 .antialiased {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
