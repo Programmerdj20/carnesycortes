@@ -23,10 +23,10 @@ const whatsappSvg = (
   </svg>
 );
 
-export default function HomePage() {
-  const todosLosProductos = getProductos();
+export default async function HomePage() {
+  const todosLosProductos = await getProductos();
   const productosDestacados = todosLosProductos.filter(p => p.destacado);
-  const comboDestacado = todosLosProductos.find(p => p.slug === 'parrillada-ejecutiva');
+  const comboDestacado = todosLosProductos.find(p => p.categoria === 'combo');
 
   return (
     <>

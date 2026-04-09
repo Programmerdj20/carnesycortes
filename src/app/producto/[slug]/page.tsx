@@ -15,13 +15,13 @@ const categoriaLabel: Record<string, string> = {
 };
 
 export async function generateStaticParams() {
-  const productos = getProductos();
+  const productos = await getProductos();
   return productos.map(p => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const producto = getProductoBySlug(slug);
+  const producto = await getProductoBySlug(slug);
   if (!producto) return {};
   return {
     title: `${producto.nombre} - Carnes & Cortes`,
@@ -31,10 +31,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ProductoPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const producto = getProductoBySlug(slug);
+  const producto = await getProductoBySlug(slug);
   if (!producto) notFound();
 
-  const todosLosProductos = getProductos();
+  const todosLosProductos = await getProductos();
   const relacionados = todosLosProductos
     .filter(p => p.categoria === producto.categoria && p.id !== producto.id)
     .slice(0, 4);

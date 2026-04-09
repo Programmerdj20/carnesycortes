@@ -20,6 +20,7 @@ export const metadata: Metadata = {
   description: 'Carnes & Cortes - Cortes especializados premium desde 2009',
   keywords: 'carnes premium, cortes especializados, carne de res, domicilios, carnicería',
   authors: [{ name: 'Carnes & Cortes' }],
+  icons: { icon: '/icon.svg' },
   openGraph: {
     type: 'website',
     title: 'Carnes & Cortes',
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
+    <html lang="es" data-scroll-behavior="smooth">
       <body className={`antialiased ${inter.variable} ${playfair.variable}`}>
         <CartProvider>
           <Header />

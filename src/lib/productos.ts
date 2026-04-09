@@ -1,5 +1,4 @@
-import fs from 'fs';
-import path from 'path';
+import { fetchProductos, fetchProductoBySlug, wcProductoToProducto } from './woocommerce';
 
 export interface Nutricion {
   calorias: number;
@@ -36,15 +35,12 @@ export interface Producto {
   grado?: string;
 }
 
-export function getProductos(): Producto[] {
-  const productosDir = path.join(process.cwd(), 'src/content/productos');
-  const files = fs.readdirSync(productosDir).filter(f => f.endsWith('.json'));
-  return files.map(file => {
-    const content = fs.readFileSync(path.join(productosDir, file), 'utf-8');
-    return JSON.parse(content) as Producto;
-  });
+export async function getProductos(): Promise<Producto[]> {
+  const wcProductos = await fetchProductos();
+  return wcProductos.map(wcProductoToProducto);
 }
 
-export function getProductoBySlug(slug: string): Producto | undefined {
-  return getProductos().find(p => p.slug === slug);
+export async function getProductoBySlug(slug: string): Promise<Producto | undefined> {
+  const wc = await fetchProductoBySlug(slug);
+  return wc ? wcProductoToProducto(wc) : undefined;
 }

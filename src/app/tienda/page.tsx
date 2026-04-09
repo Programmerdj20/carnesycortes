@@ -8,8 +8,8 @@ export const metadata = {
   description: 'Explora nuestra selección completa de cortes premium y especialidades',
 };
 
-export default function TiendaPage() {
-  const productos = getProductos();
+export default async function TiendaPage() {
+  const productos = await getProductos();
 
   return (
     <>

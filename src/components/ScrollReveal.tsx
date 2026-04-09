@@ -1,16 +1,22 @@
 'use client';
 
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function ScrollReveal() {
+  const pathname = usePathname();
+
   useEffect(() => {
     let frameId: number;
+    let observer: IntersectionObserver;
 
     const init = () => {
       const elements = document.querySelectorAll<HTMLElement>('.reveal-on-scroll');
-      if (elements.length === 0) return;
 
-      // Marcar inmediatamente los elementos ya visibles en el viewport
+      // Reiniciar estado de animación en cada navegación
+      elements.forEach(el => el.classList.remove('revealed'));
+
+      // Revelar inmediatamente los ya visibles en el viewport
       elements.forEach(el => {
         const rect = el.getBoundingClientRect();
         if (rect.top < window.innerHeight && rect.bottom > 0) {
@@ -18,7 +24,7 @@ export default function ScrollReveal() {
         }
       });
 
-      const observer = new IntersectionObserver(
+      observer = new IntersectionObserver(
         (entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -35,19 +41,20 @@ export default function ScrollReveal() {
           observer.observe(el);
         }
       });
-
-      return () => observer.disconnect();
     };
 
-    // Doble requestAnimationFrame para garantizar que el layout esté completamente calculado
+    // Doble RAF para garantizar que el DOM de la nueva página esté pintado
     frameId = requestAnimationFrame(() => {
       frameId = requestAnimationFrame(() => {
         init();
       });
     });
 
-    return () => cancelAnimationFrame(frameId);
-  }, []);
+    return () => {
+      cancelAnimationFrame(frameId);
+      observer?.disconnect();
+    };
+  }, [pathname]); // Se reinicia en cada cambio de ruta
 
   return null;
 }
