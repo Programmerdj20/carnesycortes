@@ -94,11 +94,11 @@ function VitrinaCard({ producto, accent }: { producto: Producto; accent: 'red' |
             {producto.nombre}
           </h3>
         </Link>
-        <p className="text-white/35 text-xs leading-relaxed mb-4 line-clamp-2 flex-1">
+        <p className="text-white/60 text-xs leading-relaxed mb-4 line-clamp-2 flex-1">
           {producto.descripcion}
         </p>
-        <div className="flex items-center justify-between gap-3 mt-auto pt-3 border-t border-white/[0.07]">
-          <span className={`text-xl font-display font-bold tracking-tight ${isGold ? 'text-gold' : 'text-brand-red'}`}>
+        <div className="flex items-center justify-between gap-3 mt-auto pt-3 border-t border-white/[0.10]">
+          <span className={`text-xl font-display font-bold tracking-tight ${isGold ? 'text-gold' : 'text-brand-red-light'}`}>
             ${producto.precio.toLocaleString('es-CO')}
           </span>
           <button
@@ -106,7 +106,7 @@ function VitrinaCard({ producto, accent }: { producto: Producto; accent: 'red' |
             className={`text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-300 ${
               isGold
                 ? 'border-gold/35 text-gold bg-gold/10 hover:bg-gold hover:text-dark-900 hover:border-gold'
-                : 'border-brand-red/40 text-brand-red bg-brand-red/10 hover:bg-brand-red hover:text-white hover:border-brand-red'
+                : 'bg-brand-red border-brand-red text-white hover:bg-brand-red-dark hover:border-brand-red-dark'
             }`}
           >
             Agregar
@@ -165,9 +165,9 @@ export default function VitrinaSection({ tradicionales, especiales, cantidad = 3
         {hasTrad && (
           <div className="mb-16 reveal-on-scroll">
             <div className="flex items-center gap-4 mb-8">
-              <div className="flex items-center gap-2.5 bg-brand-red/15 border border-brand-red/35 rounded-full px-4 py-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-red" />
-                <span className="text-brand-red text-[10px] font-bold uppercase tracking-[0.2em]">Cortes Tradicionales</span>
+              <div className="flex items-center gap-2.5 bg-brand-red border border-brand-red rounded-full px-4 py-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-white/80" />
+                <span className="text-white text-[10px] font-bold uppercase tracking-[0.2em]">Cortes Tradicionales</span>
               </div>
               <div className="flex-1 h-px bg-gradient-to-r from-brand-red/25 to-transparent" />
               <Link
