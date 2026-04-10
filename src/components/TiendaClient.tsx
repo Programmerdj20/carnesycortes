@@ -40,9 +40,9 @@ export default function TiendaClient({ productos }: { productos: Producto[] }) {
   return (
     <>
       {/* Filtros sticky */}
-      <section className="sticky top-[72px] z-30 bg-white border-b border-gray-100 shadow-premium-sm">
+      <section className="sticky top-[80px] sm:top-[130px] z-30 pointer-events-none">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2 py-4 overflow-x-auto scrollbar-hide">
+          <div className="flex items-center gap-2 py-4 overflow-x-auto scrollbar-hide pointer-events-auto">
             {categorias.map(cat => (
               <button
                 key={cat.id}
