@@ -93,7 +93,7 @@ export default async function HomePage() {
 
               {/* Badge superior: calidad */}
               <div className="absolute -top-8 right-8 flex items-center gap-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
-                <span className="w-2 h-2 rounded-full bg-gold animate-pulse-dot" />
+                <span className="w-2 h-2 rounded-full bg-brand-red animate-pulse-dot" />
                 <span className="text-white/90 text-[11px] font-bold uppercase tracking-[0.2em]">100% Premium</span>
               </div>
 
@@ -121,8 +121,8 @@ export default async function HomePage() {
               </div>
 
               {/* Badge inferior: frescura garantizada */}
-              <div className="mt-8 ml-12 flex items-center gap-3 bg-dark-900/50 backdrop-blur-md border border-gold/20 rounded-xl px-5 py-3 w-fit shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
-                <svg className="w-4 h-4 text-gold shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="mt-8 ml-12 flex items-center gap-3 bg-dark-900/50 backdrop-blur-md border border-white/15 rounded-xl px-5 py-3 w-fit shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
+                <svg className="w-4 h-4 text-white/70 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
                 <div>
@@ -134,7 +134,7 @@ export default async function HomePage() {
               {/* Estrellas flotantes */}
               <div className="mt-5 ml-12 flex items-center gap-1.5">
                 {[1,2,3,4,5].map(i => (
-                  <svg key={i} className="w-4 h-4 text-gold" fill="currentColor" viewBox="0 0 20 20">
+                  <svg key={i} className="w-4 h-4 text-white/60" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
                 ))}
@@ -169,8 +169,8 @@ export default async function HomePage() {
 
                 {/* 100% Calidad */}
                 <div className="group py-7 px-4 text-center border-r border-white/20 hover:bg-white/[0.05] transition-colors duration-300">
-                  <span className="block w-5 h-0.5 bg-gold mx-auto mb-3 rounded-full transition-all duration-500 group-hover:w-12" />
-                  <span className="block text-3xl lg:text-4xl font-display font-bold text-gold tracking-tight">100%</span>
+                  <span className="block w-5 h-0.5 bg-white mx-auto mb-3 rounded-full transition-all duration-500 group-hover:w-12" />
+                  <span className="block text-3xl lg:text-4xl font-display font-bold text-white tracking-tight">100%</span>
                   <p className="text-white/75 text-[10px] uppercase tracking-[0.2em] mt-2 leading-relaxed">Calidad Garantizada</p>
                 </div>
 
@@ -273,7 +273,7 @@ export default async function HomePage() {
                 <img src={comboDestacado.imagen} alt={comboDestacado.nombre} className="w-full aspect-[4/3] object-cover" loading="lazy" />
               </div>
               <div>
-                <span className="inline-flex items-center gap-2 bg-gold/20 text-gold border border-gold/30 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider mb-6">
+                <span className="inline-flex items-center gap-2 bg-white/10 text-white border border-white/20 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider mb-6">
                   <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
@@ -312,100 +312,233 @@ export default async function HomePage() {
       <VitrinaSection tradicionales={tradicionales} especiales={especiales} cantidad={3} />
 
       {/* ========== POR QUÉ ELEGIRNOS ========== */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14 reveal-on-scroll">
-            <span className="text-brand-red font-semibold text-sm uppercase tracking-widest">Confianza</span>
-            <h2 className="text-3xl sm:text-4xl font-display font-bold text-gray-900 mt-2">
-              Por Qué <span className="text-brand-red">Elegirnos</span>
-            </h2>
-          </div>
+      <section className="py-24 bg-cream relative overflow-hidden">
+        {/* Textura de fondo sutil */}
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{ backgroundImage: 'radial-gradient(circle, #0a0a0a 1px, transparent 1px)', backgroundSize: '32px 32px' }}
+        />
+        {/* Acento lateral rojo */}
+        <div className="absolute top-0 bottom-0 left-0 w-1 bg-gradient-to-b from-transparent via-brand-red/40 to-transparent" />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 reveal-on-scroll stagger-children">
-            {[
-              {
-                icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />,
-                titulo: 'Calidad Certificada',
-                desc: 'Cortes seleccionados con los más altos estándares de calidad y frescura',
-              },
-              {
-                icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />,
-                titulo: 'Entrega Rápida',
-                desc: 'Domicilios en toda la ciudad con cadena de frío garantizada',
-              },
-              {
-                icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />,
-                titulo: 'Control de Temperatura',
-                desc: 'Mantenemos la cadena de frío desde el origen hasta tu puerta',
-              },
-              {
-                icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />,
-                titulo: 'Frescura Garantizada',
-                desc: 'Productos frescos del día con la mejor selección del mercado',
-              },
-            ].map(item => (
-              <div key={item.titulo} className="text-center p-8 rounded-2xl bg-cream border border-gray-100 hover:-translate-y-2 transition-all duration-300">
-                <div className="w-16 h-16 bg-brand-red/10 rounded-2xl flex items-center justify-center mx-auto mb-5">
-                  <svg className="w-8 h-8 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    {item.icon}
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{item.titulo}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+
+            {/* ── Columna izquierda: titular editorial ── */}
+            <div className="reveal-on-scroll lg:sticky lg:top-32">
+              <div className="flex items-center gap-4 mb-8">
+                <span className="block h-px w-10 bg-brand-red" />
+                <span className="text-brand-red text-[10px] font-bold uppercase tracking-[0.3em]">Por qué elegirnos</span>
               </div>
-            ))}
+
+              <h2 className="font-display font-bold text-gray-900 leading-[1.05] mb-8">
+                <span className="block text-5xl sm:text-6xl lg:text-7xl">15 años</span>
+                <span className="block text-3xl sm:text-4xl lg:text-5xl text-gray-400 mt-1">eligiendo</span>
+                <span className="block text-3xl sm:text-4xl lg:text-5xl text-brand-red mt-1">lo mejor.</span>
+              </h2>
+
+              <p className="text-gray-500 text-base leading-relaxed max-w-sm">
+                No es solo carne. Es el compromiso diario de quienes llevamos más de una década seleccionando cada corte como si fuera para nuestra propia mesa.
+              </p>
+
+              {/* Logo como marca de agua */}
+              <div className="mt-12 select-none pointer-events-none" aria-hidden="true">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/Assets/Logo cc.png"
+                  alt=""
+                  className="w-56 opacity-[0.06] grayscale"
+                />
+              </div>
+            </div>
+
+            {/* ── Columna derecha: lista editorial numerada ── */}
+            <div className="reveal-on-scroll stagger-children">
+              {[
+                {
+                  num: '01',
+                  titulo: 'Calidad Certificada',
+                  desc: 'Cada corte pasa por un proceso de selección riguroso. Solo llega a tu mesa lo que cumple nuestros estándares.',
+                  acento: 'text-brand-red',
+                },
+                {
+                  num: '02',
+                  titulo: 'Entrega Rápida',
+                  desc: 'Domicilios en toda la ciudad. Tu pedido sale fresco y llega fresco — sin excusas.',
+                  acento: 'text-gray-900',
+                },
+                {
+                  num: '03',
+                  titulo: 'Cadena de Frío Total',
+                  desc: 'Controlamos la temperatura desde el origen hasta tu puerta. La frescura no es opcional.',
+                  acento: 'text-brand-red',
+                },
+                {
+                  num: '04',
+                  titulo: 'Frescura Garantizada',
+                  desc: 'Productos del día, siempre. Si no está fresco, no sale de nuestra cocina.',
+                  acento: 'text-brand-red',
+                },
+              ].map((item) => (
+                <div
+                  key={item.num}
+                  className="group flex gap-8 py-8 border-b border-gray-200 last:border-0 hover:border-gray-400 transition-colors duration-500 cursor-default"
+                >
+                  {/* Número */}
+                  <span className={`font-display font-bold text-4xl leading-none shrink-0 tabular-nums transition-colors duration-300 ${item.acento} opacity-20 group-hover:opacity-100`}>
+                    {item.num}
+                  </span>
+
+                  {/* Texto */}
+                  <div className="pt-1">
+                    <h3 className="font-bold text-gray-900 text-lg mb-2">
+                      {item.titulo}
+                    </h3>
+                    <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-600 transition-colors duration-300">
+                      {item.desc}
+                    </p>
+                  </div>
+
+                  {/* Flecha que aparece en hover */}
+                  <div className="ml-auto shrink-0 pt-1 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                    <svg className={`w-5 h-5 ${item.acento}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* ========== TESTIMONIOS ========== */}
-      <section className="py-20 bg-cream">
+      <section className="py-24 bg-cream relative overflow-hidden">
+        {/* Acento vertical rojo */}
+        <div className="absolute top-0 bottom-0 left-0 w-1 bg-gradient-to-b from-transparent via-brand-red/40 to-transparent" />
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14 reveal-on-scroll">
-            <span className="text-brand-red font-semibold text-sm uppercase tracking-widest">Testimonios</span>
-            <h2 className="text-3xl sm:text-4xl font-display font-bold text-gray-900 mt-2">
-              Lo Que Dicen <span className="text-brand-red">Nuestros Clientes</span>
-            </h2>
+
+          {/* Encabezado */}
+          <div className="flex items-center gap-4 mb-16 reveal-on-scroll">
+            <span className="block h-px w-10 bg-brand-red shrink-0" />
+            <span className="text-brand-red text-[10px] font-bold uppercase tracking-[0.3em]">Lo que dicen nuestros clientes</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 reveal-on-scroll stagger-children">
-            {testimonios.map(t => (
-              <TestimonialCard key={t.nombre} nombre={t.nombre} texto={t.texto} rating={t.rating} />
-            ))}
+          {/* Layout asimétrico: quote principal + dos secundarios */}
+          <div className="grid lg:grid-cols-5 gap-10 lg:gap-16 items-start reveal-on-scroll">
+
+            {/* ── Quote principal (ocupa 3 columnas) ── */}
+            <div className="lg:col-span-3">
+              {/* Comilla decorativa */}
+              <span className="block font-display text-[96px] leading-none text-brand-red/20 select-none -mb-6" aria-hidden="true">
+                &ldquo;
+              </span>
+              <blockquote>
+                <p className="font-display text-2xl sm:text-3xl text-gray-900 leading-[1.3] font-medium">
+                  {testimonios[0].texto}
+                </p>
+                <footer className="mt-8 flex items-center gap-4">
+                  <div className="w-10 h-px bg-brand-red shrink-0" />
+                  <div>
+                    <p className="font-bold text-gray-900 text-sm">{testimonios[0].nombre}</p>
+                    <p className="text-gray-400 text-xs mt-0.5 uppercase tracking-widest">Cliente frecuente</p>
+                  </div>
+                </footer>
+              </blockquote>
+            </div>
+
+            {/* ── Quotes secundarios (2 columnas) ── */}
+            <div className="lg:col-span-2 flex flex-col gap-8 lg:pt-8">
+              {testimonios.slice(1).map((t, i) => (
+                <div key={t.nombre} className="relative pl-6 border-l-2 border-brand-red/30">
+                  <p className="text-gray-600 text-sm leading-relaxed italic">
+                    &ldquo;{t.texto}&rdquo;
+                  </p>
+                  <footer className="mt-4 flex items-center gap-3">
+                    <div className="w-6 h-px shrink-0 bg-brand-red/50" />
+                    <div>
+                      <p className="font-bold text-gray-900 text-xs">{t.nombre}</p>
+                      <p className="text-gray-400 text-[10px] mt-0.5 uppercase tracking-widest">Cliente verificado</p>
+                    </div>
+                  </footer>
+                </div>
+              ))}
+
+              {/* Número decorativo */}
+              <div className="mt-4 pt-8 border-t border-gray-200">
+                <p className="text-[10px] text-gray-400 uppercase tracking-[0.2em] mb-1">Satisfacción</p>
+                <p className="font-display font-bold text-5xl text-gray-900">98<span className="text-brand-red text-3xl">%</span></p>
+                <p className="text-gray-400 text-xs mt-1">de clientes repiten su pedido</p>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
 
       {/* ========== CTA FINAL ========== */}
-      <section className="py-20 bg-brand-red relative overflow-hidden">
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal-on-scroll">
-          <h2 className="text-3xl sm:text-4xl font-display font-bold text-white mb-4">
-            ¿Listo para probar los mejores cortes?
+      <section className="py-28 bg-dark-900 relative overflow-hidden">
+        {/* Imagen de fondo con overlay fuerte */}
+        <div className="absolute inset-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://images.unsplash.com/photo-1544025162-d76694265947?w=1400&q=80"
+            alt=""
+            className="w-full h-full object-cover opacity-20"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/80 to-dark-900/60" />
+        </div>
+
+        {/* Línea roja superior */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-red/60 to-transparent" />
+
+        {/* Orbe decorativo */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-red/5 rounded-full blur-[120px] pointer-events-none" />
+
+        <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal-on-scroll">
+
+          {/* Ornamento */}
+          <div className="flex items-center justify-center gap-4 mb-8">
+            <span className="block h-px w-12 bg-gradient-to-r from-transparent to-white/25" />
+            <span className="text-white/50 text-[10px] font-bold uppercase tracking-[0.3em]">Tu mesa te espera</span>
+            <span className="block h-px w-12 bg-gradient-to-l from-transparent to-white/25" />
+          </div>
+
+          <h2 className="font-display font-bold text-white leading-[1.05] mb-6">
+            <span className="block text-4xl sm:text-5xl lg:text-6xl">¿Listo para el mejor</span>
+            <span className="block text-4xl sm:text-5xl lg:text-6xl text-brand-red mt-1">corte de tu vida?</span>
           </h2>
-          <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
-            Haz tu pedido ahora y recibe en la puerta de tu casa la mejor selección de carnes premium
+
+          <p className="text-white/50 text-lg mb-12 max-w-xl mx-auto leading-relaxed">
+            Haz tu pedido ahora y recibe en la puerta de tu casa la selección que llevan 15 años perfeccionando.
           </p>
+
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/tienda"
-              className="inline-flex items-center gap-2 bg-white text-brand-red px-8 py-4 rounded-full font-bold text-lg hover:bg-cream transition-all duration-300 hover:-translate-y-0.5 shadow-xl"
+              className="inline-flex items-center gap-2.5 bg-brand-red text-white px-10 py-4 rounded-full font-bold text-base hover:bg-brand-red-dark transition-all duration-300 hover:-translate-y-0.5 shadow-red-glow"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
-              Ir a la Tienda
+              Explorar la Tienda
             </Link>
             <a
               href="https://wa.me/5573001234567"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-green-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-green-500 transition-all duration-300 hover:-translate-y-0.5 shadow-xl"
+              className="inline-flex items-center gap-2.5 bg-white/10 backdrop-blur-sm border border-white/20 text-white px-10 py-4 rounded-full font-bold text-base hover:bg-white/20 transition-all duration-300 hover:-translate-y-0.5"
             >
               {whatsappSvg}
               Pedir por WhatsApp
             </a>
           </div>
         </div>
+
+        {/* Línea inferior */}
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       </section>
     </>
   );

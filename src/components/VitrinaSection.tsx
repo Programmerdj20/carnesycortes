@@ -17,7 +17,7 @@ function shufflePick<T>(arr: T[], n: number): T[] {
 
 // Skeleton card mientras carga el shuffle
 function SkeletonCard({ accent }: { accent: 'red' | 'gold' }) {
-  const border = accent === 'gold' ? 'border-gold/10' : 'border-brand-red/10';
+  const border = accent === 'gold' ? 'border-white/10' : 'border-brand-red/10';
   return (
     <div className={`rounded-2xl overflow-hidden bg-dark-700 border ${border} animate-pulse`}>
       <div className="aspect-[4/3] bg-dark-600" />
@@ -55,7 +55,7 @@ function VitrinaCard({ producto, accent }: { producto: Producto; accent: 'red' |
     <article
       className={`group relative flex flex-col overflow-hidden rounded-2xl bg-dark-700 border border-white/[0.06] transition-all duration-500 hover:-translate-y-1 ${
         isGold
-          ? 'hover:border-gold/35 hover:shadow-[0_12px_40px_rgba(212,168,75,0.12)]'
+          ? 'hover:border-white/25 hover:shadow-[0_12px_40px_rgba(255,255,255,0.06)]'
           : 'hover:border-brand-red/30 hover:shadow-[0_12px_40px_rgba(196,30,58,0.15)]'
       }`}
     >
@@ -72,7 +72,7 @@ function VitrinaCard({ producto, accent }: { producto: Producto; accent: 'red' |
         {producto.badge && (
           <span
             className={`absolute top-3 left-3 text-[10px] font-bold uppercase tracking-wider bg-dark-900/75 backdrop-blur-sm px-2.5 py-1 rounded-full border ${
-              isGold ? 'text-gold/90 border-gold/20' : 'text-white/90 border-white/10'
+              isGold ? 'text-white/90 border-white/15' : 'text-white/90 border-white/10'
             }`}
           >
             {producto.badge}
@@ -88,7 +88,7 @@ function VitrinaCard({ producto, accent }: { producto: Producto; accent: 'red' |
         <Link href={`/producto/${producto.slug}`}>
           <h3
             className={`font-bold text-base mb-1 leading-snug line-clamp-1 transition-colors duration-300 ${
-              isGold ? 'text-white group-hover:text-gold' : 'text-white group-hover:text-brand-red'
+              isGold ? 'text-white group-hover:text-white/80' : 'text-white group-hover:text-brand-red'
             }`}
           >
             {producto.nombre}
@@ -98,14 +98,14 @@ function VitrinaCard({ producto, accent }: { producto: Producto; accent: 'red' |
           {producto.descripcion}
         </p>
         <div className="flex items-center justify-between gap-3 mt-auto pt-3 border-t border-white/[0.10]">
-          <span className={`text-xl font-display font-bold tracking-tight ${isGold ? 'text-gold' : 'text-brand-red-light'}`}>
+          <span className={`text-xl font-display font-bold tracking-tight ${isGold ? 'text-white' : 'text-brand-red-light'}`}>
             ${producto.precio.toLocaleString('es-CO')}
           </span>
           <button
             onClick={handleAdd}
             className={`text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-300 ${
               isGold
-                ? 'border-gold/35 text-gold bg-gold/10 hover:bg-gold hover:text-dark-900 hover:border-gold'
+                ? 'border-white/25 text-white bg-white/10 hover:bg-white hover:text-dark-900 hover:border-white'
                 : 'bg-brand-red border-brand-red text-white hover:bg-brand-red-dark hover:border-brand-red-dark'
             }`}
           >
@@ -140,21 +140,21 @@ export default function VitrinaSection({ tradicionales, especiales, cantidad = 3
         className="absolute inset-0 opacity-[0.04]"
         style={{ backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)', backgroundSize: '28px 28px' }}
       />
-      {/* Gold top accent */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
+      {/* Accent superior */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-red/60 to-transparent" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Encabezado de sección */}
         <div className="text-center mb-16 reveal-on-scroll">
           <div className="flex items-center justify-center gap-5 mb-5">
-            <span className="block h-px w-20 bg-gradient-to-r from-transparent to-gold/60" />
-            <span className="text-gold font-semibold text-[10px] uppercase tracking-[0.3em]">La Vitrina</span>
-            <span className="block h-px w-20 bg-gradient-to-l from-transparent to-gold/60" />
+            <span className="block h-px w-20 bg-gradient-to-r from-transparent to-white/30" />
+            <span className="text-white/60 font-semibold text-[10px] uppercase tracking-[0.3em]">La Vitrina</span>
+            <span className="block h-px w-20 bg-gradient-to-l from-transparent to-white/30" />
           </div>
           <h2 className="text-3xl sm:text-4xl font-display font-bold text-white leading-tight">
             Más que un Combo,<br />
-            <span className="text-gold">una Tradición</span>
+            <span className="text-brand-red">una Tradición</span>
           </h2>
           <p className="text-white/40 text-sm mt-4 max-w-md mx-auto leading-relaxed">
             Cortes clásicos y especialidades únicas que cuentan la historia de nuestra cocina
@@ -195,7 +195,7 @@ export default function VitrinaSection({ tradicionales, especiales, cantidad = 3
           <div className="relative mb-16">
             <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-dark-800 px-5">
-              <div className="w-1.5 h-1.5 rounded-full bg-gold/50 mx-auto" />
+              <div className="w-1.5 h-1.5 rounded-full bg-white/20 mx-auto" />
             </div>
           </div>
         )}
@@ -204,14 +204,14 @@ export default function VitrinaSection({ tradicionales, especiales, cantidad = 3
         {hasEspec && (
           <div className="reveal-on-scroll">
             <div className="flex items-center gap-4 mb-8">
-              <div className="flex items-center gap-2.5 bg-gold/10 border border-gold/30 rounded-full px-4 py-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-gold" />
-                <span className="text-gold text-[10px] font-bold uppercase tracking-[0.2em]">Cortes Especiales</span>
+              <div className="flex items-center gap-2.5 bg-white/10 border border-white/20 rounded-full px-4 py-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-white/80" />
+                <span className="text-white text-[10px] font-bold uppercase tracking-[0.2em]">Cortes Especiales</span>
               </div>
-              <div className="flex-1 h-px bg-gradient-to-r from-gold/25 to-transparent" />
+              <div className="flex-1 h-px bg-gradient-to-r from-white/15 to-transparent" />
               <Link
                 href="/tienda?cat=especial"
-                className="text-white/35 hover:text-gold text-[10px] font-semibold uppercase tracking-wider transition-colors duration-300 flex items-center gap-1 shrink-0"
+                className="text-white/35 hover:text-white text-[10px] font-semibold uppercase tracking-wider transition-colors duration-300 flex items-center gap-1 shrink-0"
               >
                 Ver todos
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -230,8 +230,8 @@ export default function VitrinaSection({ tradicionales, especiales, cantidad = 3
         )}
       </div>
 
-      {/* Gold bottom accent */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+      {/* Accent inferior */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-red/30 to-transparent" />
     </section>
   );
 }
