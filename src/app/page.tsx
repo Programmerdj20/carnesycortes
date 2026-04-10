@@ -88,7 +88,60 @@ export default async function HomePage() {
                 </a>
               </div>
             </div>
-            <div className="hidden lg:block" />
+            {/* ── Elementos flotantes sobre la imagen del Hero ── */}
+            <div className="hidden lg:block relative animate-slide-in-right">
+
+              {/* Badge superior: calidad */}
+              <div className="absolute -top-8 right-8 flex items-center gap-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+                <span className="w-2 h-2 rounded-full bg-gold animate-pulse-dot" />
+                <span className="text-white/90 text-[11px] font-bold uppercase tracking-[0.2em]">100% Premium</span>
+              </div>
+
+              {/* Card precio flotante — anclado al centro-derecha */}
+              <div className="ml-auto w-fit mt-16">
+                <div className="bg-dark-900/60 backdrop-blur-xl border border-white/[0.12] rounded-2xl px-6 py-5 shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
+                  <p className="text-white/40 text-[10px] uppercase tracking-[0.25em] mb-1">Corte del día</p>
+                  <h3 className="font-display font-bold text-white text-lg leading-tight mb-1 max-w-[180px]">
+                    {comboDestacado.nombre}
+                  </h3>
+                  <div className="flex items-baseline gap-2 mt-2">
+                    <span className="font-display font-bold text-3xl text-brand-red leading-none">
+                      ${comboDestacado.precio.toLocaleString('es-CO')}
+                    </span>
+                    <span className="text-white/35 text-xs">/ {comboDestacado.peso}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Línea decorativa vertical */}
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 flex flex-col items-center gap-1.5 -translate-x-8">
+                <span className="block w-px h-16 bg-gradient-to-b from-transparent to-white/20" />
+                <span className="block w-1 h-1 rounded-full bg-brand-red" />
+                <span className="block w-px h-16 bg-gradient-to-t from-transparent to-white/20" />
+              </div>
+
+              {/* Badge inferior: frescura garantizada */}
+              <div className="mt-8 ml-12 flex items-center gap-3 bg-dark-900/50 backdrop-blur-md border border-gold/20 rounded-xl px-5 py-3 w-fit shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
+                <svg className="w-4 h-4 text-gold shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <div>
+                  <p className="text-white/90 text-xs font-semibold leading-none">Frescura garantizada</p>
+                  <p className="text-white/40 text-[10px] mt-0.5">Cadena de frío de origen a puerta</p>
+                </div>
+              </div>
+
+              {/* Estrellas flotantes */}
+              <div className="mt-5 ml-12 flex items-center gap-1.5">
+                {[1,2,3,4,5].map(i => (
+                  <svg key={i} className="w-4 h-4 text-gold" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+                <span className="text-white/40 text-[10px] ml-1 tracking-wide">+500 pedidos</span>
+              </div>
+
+            </div>
           </div>
         </div>
 
