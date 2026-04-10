@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" data-scroll-behavior="smooth">
-      <body className={`antialiased ${inter.variable} ${playfair.variable}`}>
+      <body className={`antialiased ${inter.variable} ${playfair.variable}`} suppressHydrationWarning>
         <CartProvider>
           <Header />
           <main>{children}</main>
