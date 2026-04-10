@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { getProductos } from '@/lib/productos';
-import ProductCard from '@/components/ProductCard';
 import TestimonialCard from '@/components/TestimonialCard';
 import AddToCartBtn from '@/components/AddToCartBtn';
+import ProductosCarousel from '@/components/ProductosCarousel';
+import VitrinaSection from '@/components/VitrinaSection';
 
 const categorias = [
   { id: 'premium', nombre: 'Cortes Premium', descripcion: 'Selección de los mejores cortes', imagen: 'https://images.unsplash.com/photo-1615937722923-67f6deaf2cc9?w=400&q=80', icono: '⭐' },
@@ -25,8 +26,14 @@ const whatsappSvg = (
 
 export default async function HomePage() {
   const todosLosProductos = await getProductos();
-  const productosDestacados = todosLosProductos.filter(p => p.destacado);
-  const comboDestacado = todosLosProductos.find(p => p.categoria === 'combo');
+  // Banner: primero busca un combo, si no hay usa cualquier producto destacado o el primero
+  const comboDestacado =
+    todosLosProductos.find(p => p.categoria === 'combo') ??
+    todosLosProductos.find(p => p.destacado) ??
+    todosLosProductos[0];
+
+  const tradicionales = todosLosProductos.filter(p => p.categoria === 'tradicional').slice(0, 3);
+  const especiales = todosLosProductos.filter(p => p.categoria === 'especial' || p.categoria === 'especialidad').slice(0, 3);
 
   return (
     <>
@@ -172,15 +179,16 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ========== PRODUCTOS DESTACADOS ========== */}
+      {/* ========== PRODUCTOS DESTACADOS — CARRUSEL ========== */}
       <section className="py-20 bg-cream" id="productos">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-14 reveal-on-scroll">
             <div>
               <span className="text-brand-red font-semibold text-sm uppercase tracking-widest">Selección</span>
               <h2 className="text-3xl sm:text-4xl font-display font-bold text-gray-900 mt-2">
                 Productos <span className="text-brand-red">Destacados</span>
               </h2>
+              <p className="text-gray-500 text-sm mt-1">12 productos seleccionados para ti cada visita</p>
             </div>
             <Link href="/tienda" className="text-brand-red font-semibold text-sm hover:underline mt-4 sm:mt-0 inline-flex items-center gap-1">
               Ver todos
@@ -190,10 +198,8 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 reveal-on-scroll stagger-children">
-            {productosDestacados.map(producto => (
-              <ProductCard key={producto.id} {...producto} />
-            ))}
+          <div className="reveal-on-scroll">
+            <ProductosCarousel productos={todosLosProductos} total={12} />
           </div>
         </div>
       </section>
@@ -248,6 +254,9 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* ========== LA VITRINA: TRADICIONALES & ESPECIALES ========== */}
+      <VitrinaSection tradicionales={tradicionales} especiales={especiales} cantidad={3} />
 
       {/* ========== POR QUÉ ELEGIRNOS ========== */}
       <section className="py-20 bg-white">
