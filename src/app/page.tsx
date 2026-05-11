@@ -7,16 +7,16 @@ export const metadata: Metadata = {
 };
 
 const sparks = [
-  { w: 3,  h: 3,  top: '12%',  left:  '7%',  delay: '0s',    dur: '7s',   op: 0.45 },
-  { w: 2,  h: 2,  top: '22%',  left: '91%',  delay: '1.8s',  dur: '9s',   op: 0.30 },
-  { w: 4,  h: 4,  top: '58%',  left:  '4%',  delay: '3.1s',  dur: '6.5s', op: 0.25 },
-  { w: 2,  h: 2,  top: '73%',  left: '89%',  delay: '0.6s',  dur: '8.5s', op: 0.35 },
-  { w: 3,  h: 3,  top: '38%',  left: '96%',  delay: '2.4s',  dur: '7.5s', op: 0.20 },
-  { w: 2,  h: 2,  top: '83%',  left: '13%',  delay: '4.2s',  dur: '6s',   op: 0.30 },
-  { w: 3,  h: 3,  top:  '8%',  left: '77%',  delay: '1.1s',  dur: '8s',   op: 0.22 },
-  { w: 2,  h: 2,  top: '47%',  left:  '2%',  delay: '3.7s',  dur: '7.2s', op: 0.18 },
-  { w: 2,  h: 2,  top: '65%',  left: '50%',  delay: '5s',    dur: '10s',  op: 0.12 },
-  { w: 3,  h: 3,  top: '30%',  left: '25%',  delay: '2s',    dur: '8s',   op: 0.10 },
+  { w: 3, h: 3, top: '12%', left: '7%', delay: '0s', dur: '7s', op: 0.45 },
+  { w: 2, h: 2, top: '22%', left: '91%', delay: '1.8s', dur: '9s', op: 0.30 },
+  { w: 4, h: 4, top: '58%', left: '4%', delay: '3.1s', dur: '6.5s', op: 0.25 },
+  { w: 2, h: 2, top: '73%', left: '89%', delay: '0.6s', dur: '8.5s', op: 0.35 },
+  { w: 3, h: 3, top: '38%', left: '96%', delay: '2.4s', dur: '7.5s', op: 0.20 },
+  { w: 2, h: 2, top: '83%', left: '13%', delay: '4.2s', dur: '6s', op: 0.30 },
+  { w: 3, h: 3, top: '8%', left: '77%', delay: '1.1s', dur: '8s', op: 0.22 },
+  { w: 2, h: 2, top: '47%', left: '2%', delay: '3.7s', dur: '7.2s', op: 0.18 },
+  { w: 2, h: 2, top: '65%', left: '50%', delay: '5s', dur: '10s', op: 0.12 },
+  { w: 3, h: 3, top: '30%', left: '25%', delay: '2s', dur: '8s', op: 0.10 },
 ];
 
 export default function Page() {
@@ -156,7 +156,7 @@ export default function Page() {
 
         {/* CTA WhatsApp */}
         <a
-          href="https://wa.me/5573001234567"
+          href="https://wa.me/3128362050"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-3 text-white font-bold text-sm uppercase tracking-wider rounded-full px-10 py-4 transition-all duration-300 hover:-translate-y-0.5 shadow-red-glow animate-fade-in-up"
