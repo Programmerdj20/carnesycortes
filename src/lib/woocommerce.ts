@@ -101,7 +101,8 @@ function getAuthHeader(): string {
 }
 
 async function wcFetch<T>(endpoint: string): Promise<T> {
-  const base = process.env.WOOCOMMERCE_URL!;
+  const base = process.env.WOOCOMMERCE_URL;
+  if (!base) throw new Error('Falta la variable de entorno WOOCOMMERCE_URL en .env.local');
   const url = `${base}/wp-json/wc/v3/${endpoint}`;
 
   const res = await fetch(url, {
