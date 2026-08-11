@@ -22,6 +22,8 @@ export default function ProductCard({ id, nombre, descripcion, imagen, categoria
   const { addItem, showNotification } = useCart();
   const badgeClass = badgeClase(categoria);
   const Icono = getCategoria(categoria)?.icono;
+  // Ejemplo temporal: placeholder con logo de marca solo para estos 2 productos, para evaluar antes de aplicarlo a todo el catálogo
+  const esEjemploLogo = slug === 't-bone' || slug === 'punta-de-anca';
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -41,6 +43,16 @@ export default function ProductCard({ id, nombre, descripcion, imagen, categoria
               sizes="(min-width: 1280px) 23vw, (min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw"
               className="object-cover transition-transform duration-700 group-hover:scale-110"
             />
+          ) : esEjemploLogo ? (
+            <div className="w-full h-full flex items-center justify-center bg-cream border-b border-dark-900/5">
+              <Image
+                src="/Assets/Logo cc.png"
+                alt="Carnes & Cortes"
+                width={378}
+                height={167}
+                className="w-1/2 max-w-[160px] h-auto object-contain transition-transform duration-700 group-hover:scale-105"
+              />
+            </div>
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-dark-900 to-dark-800">
               {Icono && <Icono className="w-10 h-10 text-gold/40" strokeWidth={1.5} />}

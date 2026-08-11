@@ -76,6 +76,8 @@ export default function ProductoHero({
   slug,
 }: ProductoHeroProps) {
   const [currentImg, setCurrentImg] = useState(imagen || galeria[0]?.url || '');
+  // Ejemplo temporal: placeholder con logo de marca solo para estos 2 productos, para evaluar antes de aplicarlo a todo el catálogo
+  const esEjemploLogo = slug === 't-bone' || slug === 'punta-de-anca';
   const [fading, setFading] = useState(false);
   const [qty, setQty] = useState(MIN_LB);
   const [wishlisted, setWishlisted] = useState(false);
@@ -152,6 +154,16 @@ export default function ProductoHero({
                       fading ? 'opacity-0' : 'opacity-100',
                     ].join(' ')}
                   />
+                ) : esEjemploLogo ? (
+                  <div className="w-full h-full flex items-center justify-center bg-cream">
+                    <Image
+                      src="/Assets/Logo cc.png"
+                      alt="Carnes & Cortes"
+                      width={378}
+                      height={167}
+                      className="w-2/5 max-w-[220px] h-auto object-contain"
+                    />
+                  </div>
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-dark-900 to-dark-800">
                     <Award className="w-12 h-12 text-gold/30" strokeWidth={1.5} />
@@ -386,8 +398,14 @@ export default function ProductoHero({
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
             <div className="flex items-center gap-4">
               {/* Miniatura */}
-              <div className="hidden sm:block relative w-12 h-12 rounded-lg overflow-hidden flex-none bg-dark-700">
-                {currentImg && <Image src={currentImg} alt={nombre} fill sizes="48px" className="object-cover" />}
+              <div className="hidden sm:flex relative w-12 h-12 rounded-lg overflow-hidden flex-none items-center justify-center bg-dark-700">
+                {currentImg ? (
+                  <Image src={currentImg} alt={nombre} fill sizes="48px" className="object-cover" />
+                ) : esEjemploLogo ? (
+                  <div className="w-full h-full flex items-center justify-center bg-cream">
+                    <Image src="/Assets/Logo cc.png" alt="Carnes & Cortes" width={378} height={167} className="w-8 h-auto object-contain" />
+                  </div>
+                ) : null}
               </div>
 
               {/* Nombre + unidad */}
