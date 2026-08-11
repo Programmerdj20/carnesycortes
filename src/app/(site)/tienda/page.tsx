@@ -15,19 +15,17 @@ export default async function TiendaPage() {
     <>
       {/* Hero compacto */}
       <section className="bg-dark-900 pt-28 pb-12 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-30">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://images.unsplash.com/photo-1544025162-d76694265947?w=1600&q=60"
-            alt=""
-            className="w-full h-full object-cover"
-          />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-dark-900/80 to-dark-900" />
+        {/* Textura de marca en vez de foto stock */}
+        <div
+          className="absolute inset-0 opacity-[0.05]"
+          style={{ backgroundImage: 'radial-gradient(circle, #D4A84B 1px, transparent 1px)', backgroundSize: '28px 28px' }}
+        />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-dark-900/40 via-dark-900/70 to-dark-900" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Tienda' }]} />
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-white mt-4">Nuestra Tienda</h1>
-          <p className="text-gray-400 mt-2 max-w-lg">Explora nuestra selección completa de cortes premium y especialidades</p>
+          <p className="text-gray-400 mt-2 max-w-lg">Cortes de res y cerdo seleccionados — de lo premium a lo clásico</p>
         </div>
       </section>
 

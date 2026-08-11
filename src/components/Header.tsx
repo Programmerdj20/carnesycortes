@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCart } from '@/contexts/CartContext';
@@ -16,12 +16,26 @@ export default function Header() {
   const pathname = usePathname();
   const { items, toggleCart } = useCart();
   const cartCount = items.reduce((t, i) => t + i.cantidad, 0);
+  const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Publica la altura real del header como variable CSS para que elementos
+  // sticky (ej. filtros de la tienda) no queden tapados — el header crece
+  // al hacer scroll (logo más grande), así que un valor fijo no sirve.
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const publish = () => document.documentElement.style.setProperty('--header-h', `${el.offsetHeight}px`);
+    publish();
+    const observer = new ResizeObserver(publish);
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -43,6 +57,7 @@ export default function Header() {
   return (
     <header
       id="mainHeader"
+      ref={headerRef}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'scrolled' : ''}`}
       style={headerStyle}
     >

@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import { WHATSAPP_NUMERO } from '@/lib/contacto';
 
 export interface CartItem {
   id: number;
@@ -96,7 +97,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const total = items.reduce((t, i) => t + i.precio * i.cantidad, 0);
     message += `💰 *Total: $${total.toLocaleString('es-CO')}*\n\n`;
     message += '📍 Por favor confirmen disponibilidad y tiempo de entrega.';
-    window.open(`https://wa.me/5573001234567?text=${encodeURIComponent(message)}`, '_blank');
+    window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(message)}`, '_blank');
   }, [items]);
 
   return (

@@ -18,6 +18,7 @@ import {
   FlameKindling,
 } from 'lucide-react';
 import { getProductoBySlug, getProductosByIds, getProductos } from '@/lib/productos';
+import { getCategoria, nombreCategoria } from '@/lib/categorias';
 import Breadcrumb from '@/components/Breadcrumb';
 import ProductCard from '@/components/ProductCard';
 import ProductoHero from '@/components/ProductoHero';
@@ -58,14 +59,6 @@ const METODO_LABEL: Record<string, string> = {
   sous_vide:    'Sous Vide',
 };
 
-const CATEGORIA_LABEL: Record<string, string> = {
-  premium:      'Premium',
-  tradicional:  'Tradicional',
-  combo:        'Combo',
-  especial:     'Especial',
-  especialidad: 'Especialidad',
-};
-
 // ─── Metadata ─────────────────────────────────────────────────────────────────
 
 export async function generateStaticParams() {
@@ -93,28 +86,29 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
   const producto = await getProductoBySlug(slug);
   if (!producto) notFound();
 
-  // Relacionados: por related_ids si existen, sino por categoría
+  const categoriaInfo = getCategoria(producto.categoria);
+
+  // Relacionados: por related_ids si existen, sino otros cortes de la misma categoría
+  const todosLosProductos = await getProductos();
   const relacionados = await (async () => {
     if (producto.related_ids.length > 0) {
       const lista = await getProductosByIds(producto.related_ids.slice(0, 4));
       return lista.filter(p => p.id !== producto.id).slice(0, 4);
     }
-    const todos = await getProductos();
-    return todos
+    return todosLosProductos
       .filter(p => p.categoria === producto.categoria && p.id !== producto.id)
       .slice(0, 4);
   })();
 
-  const label = CATEGORIA_LABEL[producto.categoria] ?? producto.categoria;
+  // Bloque cruzado: solo aplica a "Especiales" (única familia presente en ambos animales)
+  const animalCruzado = categoriaInfo?.animal === 'res' ? 'cerdo' : categoriaInfo?.animal === 'cerdo' ? 'res' : null;
+  const hayContraparteCruzada =
+    animalCruzado != null &&
+    (producto.categoria === 'cortes-especiales-res' || producto.categoria === 'cortes-especiales-cerdo');
 
-  const whatsappMsg = encodeURIComponent(
-    `Hola, quiero pedir: ${producto.nombre} (${producto.peso}) — $${new Intl.NumberFormat('es-CO').format(producto.precio)}`
-  );
-  const whatsappLink = `https://wa.me/5573001234567?text=${whatsappMsg}`;
+  const label = nombreCategoria(producto.categoria, { largo: true });
 
-  const tienePerfil =
-    producto.badge === 'premium' &&
-    (producto.marmoleo != null || producto.terneza != null || producto.intensidad_sabor != null);
+  const tienePerfil = producto.marmoleo != null || producto.terneza != null || producto.intensidad_sabor != null;
 
   const tieneCoccion =
     (producto.metodos_coccion?.length ?? 0) > 0 || producto.metodo_principal != null;
@@ -151,7 +145,6 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
         stock={producto.stock}
         origen={producto.origen}
         slug={producto.slug}
-        whatsappLink={whatsappLink}
       />
 
       {/* ── Perfil del Corte + Cómo Cocinarlo ─────────────────────────── */}
@@ -441,7 +434,7 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
                   También te puede interesar
                 </p>
                 <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
-                  Cortes Relacionados
+                  Otros cortes de esta categoría
                 </h2>
               </div>
               <Link
@@ -458,6 +451,19 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
                 <ProductCard key={p.id} {...p} />
               ))}
             </div>
+
+            {/* Bloque cruzado: Especiales de Res <-> Especiales de Cerdo */}
+            {hayContraparteCruzada && (
+              <Link
+                href={`/tienda?animal=${animalCruzado}`}
+                className="mt-6 flex items-center justify-between gap-4 rounded-2xl bg-dark-700/50 border border-white/8 px-6 py-5 hover:border-gold/30 transition-colors group"
+              >
+                <p className="text-white/60 text-sm">
+                  También tenemos <span className="text-white font-semibold capitalize">cortes especiales de {animalCruzado}</span>
+                </p>
+                <ChevronRight size={16} className="text-white/30 group-hover:text-gold group-hover:translate-x-1 transition-all" />
+              </Link>
+            )}
           </div>
         </section>
       )}

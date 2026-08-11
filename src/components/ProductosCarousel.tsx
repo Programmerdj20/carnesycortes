@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useCart } from '@/contexts/CartContext';
 import type { Producto } from '@/lib/productos';
+import { badgeClase, nombreCategoria } from '@/lib/categorias';
 
 interface ProductosCarouselProps {
   productos: Producto[];
@@ -14,17 +15,9 @@ function shufflePick<T>(arr: T[], n: number): T[] {
   return [...arr].sort(() => Math.random() - 0.5).slice(0, n);
 }
 
-const BADGE_COLORS: Record<string, string> = {
-  premium: 'bg-brand-red text-white',
-  tradicional: 'bg-brand-red text-white',
-  combo: 'bg-green-600 text-white',
-  especial: 'bg-dark-700 text-white border border-white/20',
-  especialidad: 'bg-dark-700 text-white border border-white/20',
-};
-
 function CarouselCard({ producto }: { producto: Producto }) {
   const { addItem, showNotification } = useCart();
-  const badgeClass = BADGE_COLORS[producto.categoria] || 'bg-brand-red text-white';
+  const badgeClass = badgeClase(producto.categoria);
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -46,7 +39,7 @@ function CarouselCard({ producto }: { producto: Producto }) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           <span className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${badgeClass}`}>
-            {producto.categoria}
+            {nombreCategoria(producto.categoria)}
           </span>
           {producto.destacado && (
             <span className="absolute top-4 right-4 bg-brand-red text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1">

@@ -1,4 +1,5 @@
 import 'server-only';
+import { CATEGORIA_IDS, type CategoriaId } from './categorias';
 
 // ─── Tipos crudos de la API de WooCommerce ────────────────────────────────────
 
@@ -90,7 +91,7 @@ interface Preparacion {
   tips?: string[];
 }
 
-type CategoriaValida = 'premium' | 'tradicional' | 'combo' | 'especial' | 'especialidad';
+type CategoriaValida = CategoriaId;
 
 // ─── Cliente HTTP ─────────────────────────────────────────────────────────────
 
@@ -120,20 +121,23 @@ async function wcFetch<T>(endpoint: string): Promise<T> {
 
 // ─── Helpers de mapeo ─────────────────────────────────────────────────────────
 
-const CATEGORIAS_VALIDAS: CategoriaValida[] = ['premium', 'tradicional', 'combo', 'especial', 'especialidad'];
+const CATEGORIAS_VALIDAS: CategoriaValida[] = CATEGORIA_IDS;
 
-const CATEGORIA_MAP: Record<string, CategoriaValida> = {
-  'premium': 'premium',
-  'cortes-premium': 'premium',
-  'tradicional': 'tradicional',
-  'cortes-tradicionales': 'tradicional',
-  'combo': 'combo',
-  'combos': 'combo',
-  'especial': 'especial',
-  'especiales': 'especial',
-  'especialidad': 'especialidad',
-  'especialidades': 'especialidad',
-};
+// WooCommerce devuelve '' (string vacío) para campos numéricos personalizados
+// que nunca se diligenciaron, en vez de null/undefined. `?? ` no lo detecta
+// porque '' no es nullish, así que sin este filtro un producto sin datos
+// termina con marmoleo: '' — que pasa el check `!= null` como si tuviera valor.
+function numOrUndef(v: unknown): number | undefined {
+  if (typeof v === 'number' && !Number.isNaN(v)) return v;
+  if (typeof v === 'string' && v.trim() !== '' && !Number.isNaN(Number(v))) return Number(v);
+  return undefined;
+}
+
+// Mismo problema para campos de texto: '' en vez de ausente.
+function strOrUndef(v: unknown): string | undefined {
+  if (typeof v === 'string' && v.trim() !== '') return v;
+  return undefined;
+}
 
 function getMeta<T>(meta: WCMetaData[], key: string): T | undefined {
   const entry = meta.find(m => m.key === key);
@@ -145,29 +149,33 @@ function getMeta<T>(meta: WCMetaData[], key: string): T | undefined {
   return entry.value as T;
 }
 
+// La categoría asignada en WooCommerce es la autoridad (coincide 1:1 con el
+// slug de la taxonomía en src/lib/categorias.ts). cyc_badge queda solo como
+// sello visual decorativo ("premium", "destacado"), ya no decide la categoría.
 function mapCategoria(p: WCProduct): CategoriaValida {
+  for (const cat of p.categories) {
+    const slug = cat.slug.toLowerCase();
+    if (CATEGORIAS_VALIDAS.includes(slug as CategoriaValida)) return slug as CategoriaValida;
+  }
   const badge = p.cyc_badge ?? getMeta<string>(p.meta_data, 'cyc_badge');
   if (badge) {
     const norm = badge.toLowerCase() as CategoriaValida;
     if (CATEGORIAS_VALIDAS.includes(norm)) return norm;
   }
-  for (const cat of p.categories) {
-    const mapped = CATEGORIA_MAP[cat.slug.toLowerCase()];
-    if (mapped) return mapped;
-  }
-  return 'tradicional';
+  return 'cortes-res';
 }
 
 function buildNutricion(p: WCProduct): Nutricion | undefined {
   // Campos individuales top-level tienen prioridad
-  if (p.cyc_calorias != null) {
+  const calorias = numOrUndef(p.cyc_calorias);
+  if (calorias != null) {
     return {
-      calorias: p.cyc_calorias,
-      proteinas: p.cyc_proteina ?? 0,
-      grasas: p.cyc_grasa_total ?? 0,
-      grasas_saturadas: p.cyc_grasa_sat,
-      hierro: p.cyc_hierro,
-      sodio: p.cyc_sodio,
+      calorias,
+      proteinas: numOrUndef(p.cyc_proteina) ?? 0,
+      grasas: numOrUndef(p.cyc_grasa_total) ?? 0,
+      grasas_saturadas: numOrUndef(p.cyc_grasa_sat),
+      hierro: numOrUndef(p.cyc_hierro),
+      sodio: numOrUndef(p.cyc_sodio),
     };
   }
   // Fallback al objeto en meta_data
@@ -175,13 +183,13 @@ function buildNutricion(p: WCProduct): Nutricion | undefined {
 }
 
 function buildPreparacion(p: WCProduct): Preparacion | undefined {
-  const metodoPrincipal = p.cyc_metodo_principal ?? getMeta<string>(p.meta_data, 'cyc_metodo_principal');
+  const metodoPrincipal = strOrUndef(p.cyc_metodo_principal) ?? getMeta<string>(p.meta_data, 'cyc_metodo_principal');
   if (metodoPrincipal) {
-    const tempRaw = p.cyc_temp_coccion ?? getMeta<number>(p.meta_data, 'cyc_temp_coccion');
-    const tipsRaw = p.cyc_tips_coccion ?? getMeta<string>(p.meta_data, 'cyc_tips_coccion');
+    const tempRaw = numOrUndef(p.cyc_temp_coccion) ?? getMeta<number>(p.meta_data, 'cyc_temp_coccion');
+    const tipsRaw = strOrUndef(p.cyc_tips_coccion) ?? getMeta<string>(p.meta_data, 'cyc_tips_coccion');
     return {
       metodo: metodoPrincipal,
-      tiempo: p.cyc_tiempo_coccion ?? getMeta<string>(p.meta_data, 'cyc_tiempo_coccion') ?? '',
+      tiempo: strOrUndef(p.cyc_tiempo_coccion) ?? getMeta<string>(p.meta_data, 'cyc_tiempo_coccion') ?? '',
       temperatura: tempRaw != null ? `${tempRaw}°C` : '',
       tips: tipsRaw ? tipsRaw.split('\n').map(t => t.trim()).filter(Boolean) : [],
     };
@@ -226,7 +234,7 @@ export function wcProductoToProducto(p: WCProduct) {
     ? maridajeStr.split(',').map(m => m.trim()).filter(Boolean)
     : getMeta<string[]>(p.meta_data, 'cyc_maridajes');
 
-  const maduracion = p.cyc_maduracion ?? getMeta<number>(p.meta_data, 'cyc_maduracion');
+  const maduracion = numOrUndef(p.cyc_maduracion) ?? getMeta<number>(p.meta_data, 'cyc_maduracion');
   const metodosCoccion = p.cyc_metodos_coccion ?? getMeta<string[]>(p.meta_data, 'cyc_metodos_coccion');
 
   return {
@@ -242,22 +250,22 @@ export function wcProductoToProducto(p: WCProduct) {
     peso,
     destacado,
     stock,
-    badge: p.cyc_badge ?? getMeta<string>(p.meta_data, 'cyc_badge'),
+    badge: strOrUndef(p.cyc_badge) ?? getMeta<string>(p.meta_data, 'cyc_badge'),
     badge_secundario: badgeSecundario,
     nutricion: buildNutricion(p),
     preparacion: buildPreparacion(p),
     maridajes,
-    origen: p.cyc_origen ?? getMeta<string>(p.meta_data, 'cyc_origen'),
+    origen: strOrUndef(p.cyc_origen) ?? getMeta<string>(p.meta_data, 'cyc_origen'),
     maduracion,
-    grado: p.cyc_grado ?? getMeta<string>(p.meta_data, 'cyc_grado'),
-    marmoleo: p.cyc_marmoleo ?? getMeta<number>(p.meta_data, 'cyc_marmoleo'),
-    terneza: p.cyc_terneza ?? getMeta<number>(p.meta_data, 'cyc_terneza'),
-    intensidad_sabor: p.cyc_intensidad_sabor ?? getMeta<number>(p.meta_data, 'cyc_intensidad_sabor'),
+    grado: strOrUndef(p.cyc_grado) ?? getMeta<string>(p.meta_data, 'cyc_grado'),
+    marmoleo: numOrUndef(p.cyc_marmoleo) ?? getMeta<number>(p.meta_data, 'cyc_marmoleo'),
+    terneza: numOrUndef(p.cyc_terneza) ?? getMeta<number>(p.meta_data, 'cyc_terneza'),
+    intensidad_sabor: numOrUndef(p.cyc_intensidad_sabor) ?? getMeta<number>(p.meta_data, 'cyc_intensidad_sabor'),
     metodos_coccion: metodosCoccion,
-    metodo_principal: p.cyc_metodo_principal ?? getMeta<string>(p.meta_data, 'cyc_metodo_principal'),
-    temp_coccion: p.cyc_temp_coccion ?? getMeta<number>(p.meta_data, 'cyc_temp_coccion'),
-    tiempo_coccion: p.cyc_tiempo_coccion ?? getMeta<string>(p.meta_data, 'cyc_tiempo_coccion'),
-    tips_coccion: p.cyc_tips_coccion ?? getMeta<string>(p.meta_data, 'cyc_tips_coccion'),
+    metodo_principal: strOrUndef(p.cyc_metodo_principal) ?? getMeta<string>(p.meta_data, 'cyc_metodo_principal'),
+    temp_coccion: numOrUndef(p.cyc_temp_coccion) ?? getMeta<number>(p.meta_data, 'cyc_temp_coccion'),
+    tiempo_coccion: strOrUndef(p.cyc_tiempo_coccion) ?? getMeta<string>(p.meta_data, 'cyc_tiempo_coccion'),
+    tips_coccion: strOrUndef(p.cyc_tips_coccion) ?? getMeta<string>(p.meta_data, 'cyc_tips_coccion'),
     related_ids: p.related_ids ?? [],
   };
 }

@@ -1,11 +1,9 @@
 import Link from 'next/link';
+import { CATEGORIAS } from '@/lib/categorias';
 
-const categorias = [
-  { nombre: 'Cortes Premium', href: '/tienda?cat=premium' },
-  { nombre: 'Tradicionales', href: '/tienda?cat=tradicional' },
-  { nombre: 'Combos', href: '/tienda?cat=combo' },
-  { nombre: 'Especialidades', href: '/tienda?cat=especialidad' },
-];
+const categorias = [...CATEGORIAS]
+  .sort((a, b) => a.orden - b.orden)
+  .map(cat => ({ nombre: cat.nombreLargo, href: `/tienda?cat=${cat.id}` }));
 
 const navegacion = [
   { nombre: 'Inicio', href: '/' },

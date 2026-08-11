@@ -28,12 +28,12 @@ export default async function HomePage() {
   const todosLosProductos = await getProductos();
   // Banner: primero busca un combo, si no hay usa cualquier producto destacado o el primero
   const comboDestacado =
-    todosLosProductos.find(p => p.categoria === 'combo') ??
+    todosLosProductos.find(p => p.categoria === 'combos') ??
     todosLosProductos.find(p => p.destacado) ??
     todosLosProductos[0];
 
-  const tradicionales = todosLosProductos.filter(p => p.categoria === 'tradicional').slice(0, 3);
-  const especiales = todosLosProductos.filter(p => p.categoria === 'especial' || p.categoria === 'especialidad').slice(0, 3);
+  const tradicionales = todosLosProductos.filter(p => p.categoria === 'cortes-res').slice(0, 3);
+  const especiales = todosLosProductos.filter(p => p.categoria === 'cortes-especiales-res' || p.categoria === 'cortes-especiales-cerdo').slice(0, 3);
 
   return (
     <>

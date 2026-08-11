@@ -5,6 +5,7 @@ import {
   wcProductoToProducto,
   type WCGaleriaItem,
 } from './woocommerce';
+import type { CategoriaId } from './categorias';
 
 export interface Nutricion {
   calorias: number;
@@ -30,7 +31,7 @@ export interface Producto {
   precio: number;
   imagen: string;
   galeria: WCGaleriaItem[];
-  categoria: 'premium' | 'tradicional' | 'combo' | 'especial' | 'especialidad';
+  categoria: CategoriaId;
   peso: string;
   destacado?: boolean;
   stock?: boolean;

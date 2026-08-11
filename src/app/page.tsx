@@ -156,7 +156,7 @@ export default function Page() {
 
         {/* CTA WhatsApp */}
         <a
-          href="https://wa.me/3128362050"
+          href="https://wa.me/573128362050"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-3 text-white font-bold text-sm uppercase tracking-wider rounded-full px-10 py-4 transition-all duration-300 hover:-translate-y-0.5 shadow-red-glow animate-fade-in-up"
