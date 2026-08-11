@@ -2,23 +2,23 @@
 
 import { useState } from 'react';
 import { useCart } from '@/contexts/CartContext';
+import { MIN_LB, PASO_LB, formatLb } from '@/lib/unidades';
 
 interface ProductoAddToCartProps {
   id: number;
   nombre: string;
-  precio: number;
   imagen: string;
   peso: string;
   slug: string;
 }
 
-export default function ProductoAddToCart({ id, nombre, precio, imagen, peso, slug }: ProductoAddToCartProps) {
-  const [qty, setQty] = useState(1);
+export default function ProductoAddToCart({ id, nombre, imagen, peso, slug }: ProductoAddToCartProps) {
+  const [qty, setQty] = useState(MIN_LB);
   const { addItem, showNotification } = useCart();
 
   const handleAdd = () => {
-    addItem({ id, nombre, precio, imagen, peso, slug }, qty);
-    showNotification(`${nombre} x${qty} agregado al carrito`);
+    addItem({ id, nombre, imagen, peso, slug }, qty);
+    showNotification(`${nombre} (${formatLb(qty)}) agregado al carrito`);
   };
 
   return (
@@ -26,14 +26,14 @@ export default function ProductoAddToCart({ id, nombre, precio, imagen, peso, sl
       <div className="flex items-center gap-4 mb-6">
         <div className="flex items-center border-2 border-gray-200 rounded-full overflow-hidden">
           <button
-            onClick={() => setQty(q => Math.max(1, q - 1))}
+            onClick={() => setQty(q => Math.max(MIN_LB, q - PASO_LB))}
             className="w-12 h-12 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors text-lg font-bold"
           >-</button>
-          <span className="w-12 h-12 flex items-center justify-center font-bold text-gray-900 border-x-2 border-gray-200">
-            {qty}
+          <span className="w-16 h-12 flex items-center justify-center font-bold text-gray-900 border-x-2 border-gray-200 whitespace-nowrap">
+            {formatLb(qty)}
           </span>
           <button
-            onClick={() => setQty(q => q + 1)}
+            onClick={() => setQty(q => q + PASO_LB)}
             className="w-12 h-12 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors text-lg font-bold"
           >+</button>
         </div>

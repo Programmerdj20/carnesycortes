@@ -14,15 +14,14 @@ import {
   Zap,
   Droplets,
   Activity,
-  Bean,
   FlameKindling,
 } from 'lucide-react';
 import { getProductoBySlug, getProductosByIds, getProductos } from '@/lib/productos';
 import { getCategoria, nombreCategoria } from '@/lib/categorias';
 import Breadcrumb from '@/components/Breadcrumb';
-import ProductCard from '@/components/ProductCard';
 import ProductoHero from '@/components/ProductoHero';
 import CorteProfileBars from '@/components/CorteProfileBars';
+import CortesRelacionadosCarousel from '@/components/CortesRelacionadosCarousel';
 
 // ─── Mapas ────────────────────────────────────────────────────────────────────
 
@@ -88,16 +87,30 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
 
   const categoriaInfo = getCategoria(producto.categoria);
 
-  // Relacionados: por related_ids si existen, sino otros cortes de la misma categoría
+  // Relacionados: cascada hasta completar 8, sin duplicados y sin el producto actual.
+  // 1) related_ids de WooCommerce, 2) misma categoría, 3) mismo animal, 4) resto del catálogo.
+  const TOTAL_RELACIONADOS = 8;
   const todosLosProductos = await getProductos();
   const relacionados = await (async () => {
+    const vistos = new Set<number>([producto.id]);
+    const lista: typeof todosLosProductos = [];
+    const agregar = (candidatos: typeof todosLosProductos) => {
+      for (const p of candidatos) {
+        if (lista.length >= TOTAL_RELACIONADOS) break;
+        if (vistos.has(p.id)) continue;
+        vistos.add(p.id);
+        lista.push(p);
+      }
+    };
+
     if (producto.related_ids.length > 0) {
-      const lista = await getProductosByIds(producto.related_ids.slice(0, 4));
-      return lista.filter(p => p.id !== producto.id).slice(0, 4);
+      agregar(await getProductosByIds(producto.related_ids));
     }
-    return todosLosProductos
-      .filter(p => p.categoria === producto.categoria && p.id !== producto.id)
-      .slice(0, 4);
+    agregar(todosLosProductos.filter(p => p.categoria === producto.categoria));
+    agregar(todosLosProductos.filter(p => getCategoria(p.categoria)?.animal === categoriaInfo?.animal));
+    agregar(todosLosProductos);
+
+    return lista;
   })();
 
   // Bloque cruzado: solo aplica a "Especiales" (única familia presente en ambos animales)
@@ -112,8 +125,6 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
 
   const tieneCoccion =
     (producto.metodos_coccion?.length ?? 0) > 0 || producto.metodo_principal != null;
-
-  const tieneNutricion = producto.nutricion != null;
 
   return (
     <>
@@ -136,7 +147,6 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
         id={producto.id}
         nombre={producto.nombre}
         descripcion_corta={producto.descripcion}
-        precio={producto.precio}
         peso={producto.peso}
         imagen={producto.imagen}
         galeria={producto.galeria}
@@ -316,88 +326,6 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
         </section>
       )}
 
-      {/* ── Información Nutricional ────────────────────────────────────── */}
-      {tieneNutricion && (
-        <section className="bg-dark-800 py-14 border-t border-white/5">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl">
-              {/* Header */}
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/8 flex items-center justify-center">
-                  <Activity size={16} className="text-white/50" />
-                </div>
-                <div>
-                  <h2 className="font-display text-lg font-bold text-white">Información Nutricional</h2>
-                  <p className="text-white/30 text-xs mt-0.5">Valores por 100g</p>
-                </div>
-              </div>
-
-              {/* Grid 3×2 */}
-              <div className="grid grid-cols-3 sm:grid-cols-3 gap-3">
-                {[
-                  {
-                    label: 'Calorías',
-                    value: producto.nutricion!.calorias,
-                    unit: 'kcal',
-                    icon: <Flame size={14} className="text-orange-400/70" />,
-                  },
-                  {
-                    label: 'Proteína',
-                    value: producto.nutricion!.proteinas,
-                    unit: 'g',
-                    icon: <Bean size={14} className="text-brand-red/70" />,
-                  },
-                  {
-                    label: 'Grasa total',
-                    value: producto.nutricion!.grasas,
-                    unit: 'g',
-                    icon: <Droplets size={14} className="text-amber-400/70" />,
-                  },
-                  ...(producto.nutricion!.grasas_saturadas != null
-                    ? [{
-                        label: 'Grasa sat.',
-                        value: producto.nutricion!.grasas_saturadas!,
-                        unit: 'g',
-                        icon: <Droplets size={14} className="text-yellow-400/60" />,
-                      }]
-                    : []),
-                  ...(producto.nutricion!.hierro != null
-                    ? [{
-                        label: 'Hierro',
-                        value: producto.nutricion!.hierro!,
-                        unit: 'mg',
-                        icon: <Activity size={14} className="text-red-400/70" />,
-                      }]
-                    : []),
-                  ...(producto.nutricion!.sodio != null
-                    ? [{
-                        label: 'Sodio',
-                        value: producto.nutricion!.sodio!,
-                        unit: 'mg',
-                        icon: <Zap size={14} className="text-blue-400/60" />,
-                      }]
-                    : []),
-                ].map(item => (
-                  <div
-                    key={item.label}
-                    className="bg-dark-700/30 border border-white/5 rounded-xl p-4 flex flex-col items-center text-center gap-2"
-                  >
-                    <span>{item.icon}</span>
-                    <div>
-                      <p className="text-white font-bold text-xl leading-none tabular-nums">
-                        {item.value}
-                        <span className="text-white/35 text-xs font-normal ml-1">{item.unit}</span>
-                      </p>
-                      <p className="text-white/35 text-[11px] mt-1.5">{item.label}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* ── Descripción completa ──────────────────────────────────────── */}
       {producto.descripcion_html && (
         <section className="bg-dark-900 py-14 border-t border-white/5">
@@ -446,11 +374,7 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {relacionados.map(p => (
-                <ProductCard key={p.id} {...p} />
-              ))}
-            </div>
+            <CortesRelacionadosCarousel productos={relacionados} />
 
             {/* Bloque cruzado: Especiales de Res <-> Especiales de Cerdo */}
             {hayContraparteCruzada && (

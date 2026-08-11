@@ -4,6 +4,7 @@ import TestimonialCard from '@/components/TestimonialCard';
 import AddToCartBtn from '@/components/AddToCartBtn';
 import ProductosCarousel from '@/components/ProductosCarousel';
 import VitrinaSection from '@/components/VitrinaSection';
+import { UNIDAD_CORTA } from '@/lib/unidades';
 
 const categorias = [
   { id: 'premium', nombre: 'Cortes Premium', descripcion: 'Selección de los mejores cortes', imagen: 'https://images.unsplash.com/photo-1615937722923-67f6deaf2cc9?w=400&q=80', icono: '⭐' },
@@ -105,10 +106,9 @@ export default async function HomePage() {
                     {comboDestacado.nombre}
                   </h3>
                   <div className="flex items-baseline gap-2 mt-2">
-                    <span className="font-display font-bold text-3xl text-brand-red leading-none">
-                      ${comboDestacado.precio.toLocaleString('es-CO')}
+                    <span className="font-display font-bold text-sm text-brand-red leading-none uppercase tracking-wider">
+                      {UNIDAD_CORTA}
                     </span>
-                    <span className="text-white/35 text-xs">/ {comboDestacado.peso}</span>
                   </div>
                 </div>
               </div>
@@ -282,8 +282,7 @@ export default async function HomePage() {
                 <h2 className="text-3xl sm:text-4xl font-display font-bold text-white mb-4">{comboDestacado.nombre}</h2>
                 <p className="text-gray-400 text-lg leading-relaxed mb-6">{comboDestacado.descripcion}</p>
                 <div className="flex items-center gap-4 mb-8">
-                  <span className="text-4xl font-display font-bold text-brand-red">${comboDestacado.precio.toLocaleString('es-CO')}</span>
-                  <span className="text-gray-500">/ {comboDestacado.peso}</span>
+                  <span className="text-gray-500 uppercase tracking-wider text-sm font-semibold">{UNIDAD_CORTA}</span>
                 </div>
                 <div className="flex flex-wrap gap-3">
                   <Link
@@ -295,7 +294,6 @@ export default async function HomePage() {
                   <AddToCartBtn
                     id={comboDestacado.id}
                     nombre={comboDestacado.nombre}
-                    precio={comboDestacado.precio}
                     imagen={comboDestacado.imagen}
                     peso={comboDestacado.peso}
                     slug={comboDestacado.slug}

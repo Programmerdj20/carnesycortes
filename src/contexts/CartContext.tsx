@@ -6,7 +6,6 @@ import { WHATSAPP_NUMERO } from '@/lib/contacto';
 export interface CartItem {
   id: number;
   nombre: string;
-  precio: number;
   imagen: string;
   peso: string;
   slug: string;
@@ -86,17 +85,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const sendWhatsAppOrder = useCallback(() => {
     if (items.length === 0) return;
-    let message = '🥩 *PEDIDO CARNES & CORTES*\n\n';
+    let message = '🥩 *SOLICITUD DE COTIZACIÓN — CARNES & CORTES*\n\n';
     message += '📋 *Productos:*\n';
     items.forEach(item => {
-      message += `• ${item.nombre} ${item.peso ? `(${item.peso})` : ''}\n`;
-      message += `  Cantidad: ${item.cantidad}\n`;
-      message += `  Precio: $${item.precio.toLocaleString('es-CO')} c/u\n`;
-      message += `  Subtotal: $${(item.precio * item.cantidad).toLocaleString('es-CO')}\n\n`;
+      message += `• ${item.nombre} — ${item.cantidad} Lb\n`;
     });
-    const total = items.reduce((t, i) => t + i.precio * i.cantidad, 0);
-    message += `💰 *Total: $${total.toLocaleString('es-CO')}*\n\n`;
-    message += '📍 Por favor confirmen disponibilidad y tiempo de entrega.';
+    const totalLb = items.reduce((t, i) => t + i.cantidad, 0);
+    message += `\n⚖️ *Total: ${totalLb} Lb*\n\n`;
+    message += '📍 Por favor confirmen disponibilidad, precios y tiempo de entrega.';
     window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(message)}`, '_blank');
   }, [items]);
 

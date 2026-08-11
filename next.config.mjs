@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Permite levantar un servidor de pruebas aislado (otro puerto + build dir)
+  // sin pisar el .next del servidor de desarrollo principal del usuario.
+  distDir: process.env.NEXT_DIST_DIR || '.next',
   images: {
     remotePatterns: [
       {

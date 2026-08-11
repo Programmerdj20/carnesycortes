@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useCart } from '@/contexts/CartContext';
 import type { Producto } from '@/lib/productos';
 import { badgeClase, nombreCategoria } from '@/lib/categorias';
+import { UNIDAD_CORTA, MIN_LB } from '@/lib/unidades';
 
 interface ProductosCarouselProps {
   productos: Producto[];
@@ -21,7 +22,7 @@ function CarouselCard({ producto }: { producto: Producto }) {
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
-    addItem({ id: producto.id, nombre: producto.nombre, precio: producto.precio, imagen: producto.imagen, peso: producto.peso, slug: producto.slug });
+    addItem({ id: producto.id, nombre: producto.nombre, imagen: producto.imagen, peso: producto.peso, slug: producto.slug }, MIN_LB);
     showNotification(`${producto.nombre} agregado al carrito`);
   };
 
@@ -62,10 +63,7 @@ function CarouselCard({ producto }: { producto: Producto }) {
         </Link>
         <p className="text-gray-500 text-sm mb-3 line-clamp-2 flex-1">{producto.descripcion}</p>
         <div className="flex items-center justify-between">
-          <div>
-            <span className="text-xl font-bold text-brand-red">${producto.precio.toLocaleString('es-CO')}</span>
-            <span className="text-gray-400 text-xs block">{producto.peso}</span>
-          </div>
+          <span className="text-gray-400 text-xs">{UNIDAD_CORTA}</span>
           <button
             onClick={handleAdd}
             className="flex items-center gap-1.5 bg-brand-red text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-brand-red-dark transition-all duration-300 hover:shadow-red-glow"

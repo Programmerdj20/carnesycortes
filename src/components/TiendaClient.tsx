@@ -80,8 +80,6 @@ export default function TiendaClient({ productos }: { productos: Producto[] }) {
       list = list.filter(p => p.categoria === categoria);
     }
     switch (sortBy) {
-      case 'price-asc': return [...list].sort((a, b) => a.precio - b.precio);
-      case 'price-desc': return [...list].sort((a, b) => b.precio - a.precio);
       case 'name': return [...list].sort((a, b) => a.nombre.localeCompare(b.nombre));
       default: return list;
     }
@@ -181,8 +179,6 @@ export default function TiendaClient({ productos }: { productos: Producto[] }) {
                 className="px-4 py-2 rounded-full border border-gray-200 text-sm text-gray-600 bg-white focus:outline-none focus:border-brand-red cursor-pointer flex-shrink-0"
               >
                 <option value="default">Ordenar por</option>
-                <option value="price-asc">Precio: Menor a Mayor</option>
-                <option value="price-desc">Precio: Mayor a Menor</option>
                 <option value="name">Nombre A-Z</option>
               </select>
             </div>

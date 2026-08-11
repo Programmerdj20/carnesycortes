@@ -12,14 +12,12 @@ import {
   Truck,
   ShieldCheck,
   Award,
-  ChevronLeft,
-  ChevronRight,
   Scale,
   Package,
-  MessageCircle,
 } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import { whatsappLink } from '@/lib/contacto';
+import { formatLb, MIN_LB, PASO_LB, UNIDAD_LARGA } from '@/lib/unidades';
 
 // ─── WhatsApp SVG (no está en Lucide) ────────────────────────────────────────
 function WhatsAppIcon({ className }: { className?: string }) {
@@ -41,7 +39,6 @@ interface ProductoHeroProps {
   id: number;
   nombre: string;
   descripcion_corta: string;
-  precio: number;
   peso: string;
   sku?: string;
   imagen: string;
@@ -68,7 +65,6 @@ export default function ProductoHero({
   id,
   nombre,
   descripcion_corta,
-  precio,
   peso,
   sku,
   imagen,
@@ -81,23 +77,17 @@ export default function ProductoHero({
 }: ProductoHeroProps) {
   const [currentImg, setCurrentImg] = useState(imagen || galeria[0]?.url || '');
   const [fading, setFading] = useState(false);
-  const [qty, setQty] = useState(1);
+  const [qty, setQty] = useState(MIN_LB);
   const [wishlisted, setWishlisted] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
   const { addItem, showNotification } = useCart();
 
   const ctaRef = useRef<HTMLDivElement>(null);
-  const filmstripRef = useRef<HTMLDivElement>(null);
 
   // Todas las imágenes: principal + galería
   const allImages: GaleriaItem[] = imagen ? [{ url: imagen, alt: nombre }, ...galeria] : galeria;
 
-  // Precio formateado COP
-  const precioFmt = new Intl.NumberFormat('es-CO').format(precio);
-  const sinPrecio = precio <= 0;
-  const waMensaje = sinPrecio
-    ? `Hola, quiero consultar el precio de: ${nombre}`
-    : `Hola, quiero pedir: ${nombre} (${peso}) — $${precioFmt}`;
+  const waMensaje = `Hola, quiero pedir: ${nombre} (${formatLb(qty)})`;
   const waLink = whatsappLink(waMensaje);
 
   // Sticky CTA bar — aparece cuando el botón principal sale del viewport
@@ -121,15 +111,8 @@ export default function ProductoHero({
     }, 180);
   }, [currentImg]);
 
-  // Scroll del filmstrip
-  const scrollFilmstrip = (dir: 'left' | 'right') => {
-    if (!filmstripRef.current) return;
-    filmstripRef.current.scrollBy({ left: dir === 'left' ? -200 : 200, behavior: 'smooth' });
-  };
-
   const handleAdd = () => {
-    if (sinPrecio) return;
-    addItem({ id, nombre, precio, imagen: currentImg, peso, slug }, qty);
+    addItem({ id, nombre, imagen: currentImg, peso, slug }, qty);
     showNotification(`${nombre} agregado al carrito`);
   };
 
@@ -211,49 +194,24 @@ export default function ProductoHero({
                 </button>
               </div>
 
-              {/* Filmstrip de miniaturas */}
+              {/* Miniaturas — sin flechas, la galería nunca pasa de unas pocas imágenes */}
               {allImages.length > 1 && (
-                <div className="relative">
-                  {/* Botón izquierda */}
-                  <button
-                    onClick={() => scrollFilmstrip('left')}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 z-10 w-7 h-7 rounded-full bg-dark-800 border border-white/10 flex items-center justify-center text-white/50 hover:text-white transition-colors shadow-premium-md"
-                    aria-label="Anterior"
-                  >
-                    <ChevronLeft size={14} />
-                  </button>
-
-                  {/* Tira de miniaturas */}
-                  <div
-                    ref={filmstripRef}
-                    className="flex gap-2.5 overflow-x-auto scroll-smooth pb-0.5"
-                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-                  >
-                    {allImages.map((item, i) => (
-                      <button
-                        key={i}
-                        onClick={() => switchImage(item.url)}
-                        className={[
-                          'relative flex-none w-[72px] h-[72px] sm:w-20 sm:h-20 rounded-xl overflow-hidden border-2 transition-all duration-200',
-                          currentImg === item.url
-                            ? 'border-gold opacity-100 scale-[1.04]'
-                            : 'border-dark-700 opacity-50 hover:opacity-80 hover:border-white/20',
-                        ].join(' ')}
-                        aria-label={item.alt || `Imagen ${i + 1}`}
-                      >
-                        <Image src={item.url} alt={item.alt} fill sizes="80px" className="object-cover" />
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Botón derecha */}
-                  <button
-                    onClick={() => scrollFilmstrip('right')}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 z-10 w-7 h-7 rounded-full bg-dark-800 border border-white/10 flex items-center justify-center text-white/50 hover:text-white transition-colors shadow-premium-md"
-                    aria-label="Siguiente"
-                  >
-                    <ChevronRight size={14} />
-                  </button>
+                <div className="flex flex-wrap gap-2.5">
+                  {allImages.map((item, i) => (
+                    <button
+                      key={i}
+                      onClick={() => switchImage(item.url)}
+                      className={[
+                        'relative flex-none w-[72px] h-[72px] sm:w-20 sm:h-20 rounded-xl overflow-hidden border-2 transition-all duration-200',
+                        currentImg === item.url
+                          ? 'border-gold opacity-100 scale-[1.04]'
+                          : 'border-dark-700 opacity-50 hover:opacity-80 hover:border-white/20',
+                      ].join(' ')}
+                      aria-label={item.alt || `Imagen ${i + 1}`}
+                    >
+                      <Image src={item.url} alt={item.alt} fill sizes="80px" className="object-cover" />
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
@@ -285,20 +243,12 @@ export default function ProductoHero({
                 </h1>
               </div>
 
-              {/* Precio + Stock */}
-              <div className="flex items-center justify-between gap-4 pt-1">
-                <div>
-                  {sinPrecio ? (
-                    <span className="text-2xl font-bold text-white/70 tracking-tight">Consultar precio</span>
-                  ) : (
-                    <span className="text-4xl font-bold text-white tracking-tight">
-                      ${precioFmt}
-                    </span>
-                  )}
-                  {peso && (
-                    <span className="ml-3 text-sm text-white/40 font-light">/ {peso}</span>
-                  )}
-                </div>
+              {/* Unidad de venta + Stock */}
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-dark-800 border border-white/7 text-xs text-white/50">
+                  <Scale size={11} />
+                  {UNIDAD_LARGA}
+                </span>
                 {!stock && (
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/5 text-white/40 border border-white/10">
                     <X size={12} />
@@ -307,20 +257,12 @@ export default function ProductoHero({
                 )}
               </div>
 
-              {/* SKU + Peso en chips */}
-              <div className="flex flex-wrap items-center gap-3">
-                {sku && (
-                  <span className="inline-flex items-center gap-1.5 text-xs text-white/35 font-mono tracking-wider">
-                    REF {sku}
-                  </span>
-                )}
-                {peso && (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-dark-800 border border-white/7 text-xs text-white/50">
-                    <Scale size={11} />
-                    {peso}
-                  </span>
-                )}
-              </div>
+              {/* SKU */}
+              {sku && (
+                <span className="inline-flex items-center gap-1.5 text-xs text-white/35 font-mono tracking-wider">
+                  REF {sku}
+                </span>
+              )}
 
               {/* Descripción corta */}
               {descripcion_corta && (
@@ -331,71 +273,58 @@ export default function ProductoHero({
 
               {/* ── CTA Principal ─────────────────────────────────────── */}
               <div ref={ctaRef} className="space-y-3 pt-1">
-                {sinPrecio ? (
-                  /* Sin precio publicado: WhatsApp es la acción principal */
-                  <a
-                    href={waLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2.5 w-full py-4 rounded-full font-semibold text-sm bg-brand-red text-white hover:bg-brand-red-dark shadow-red-glow transition-all duration-200 active:scale-[0.98]"
-                  >
-                    <MessageCircle size={17} />
-                    Consultar precio por WhatsApp
-                  </a>
-                ) : (
-                  <>
-                    {/* Selector de cantidad + Agregar al carrito */}
-                    <div className="flex items-stretch gap-3">
-                      {/* Cantidad */}
-                      <div className="flex items-center border border-white/12 rounded-full bg-dark-800/60 overflow-hidden">
-                        <button
-                          onClick={() => setQty(q => Math.max(1, q - 1))}
-                          disabled={qty <= 1}
-                          className="w-11 h-12 flex items-center justify-center text-white/50 hover:text-white disabled:text-white/20 transition-colors"
-                          aria-label="Reducir cantidad"
-                        >
-                          <Minus size={15} />
-                        </button>
-                        <span className="w-10 h-12 flex items-center justify-center text-white font-semibold text-sm border-x border-white/10">
-                          {qty}
-                        </span>
-                        <button
-                          onClick={() => setQty(q => q + 1)}
-                          className="w-11 h-12 flex items-center justify-center text-white/50 hover:text-white transition-colors"
-                          aria-label="Aumentar cantidad"
-                        >
-                          <Plus size={15} />
-                        </button>
-                      </div>
+                <p className="text-white/35 text-[10px] uppercase tracking-widest font-medium">Cantidad (Lb)</p>
 
-                      {/* Agregar al carrito */}
-                      <button
-                        onClick={handleAdd}
-                        disabled={!stock}
-                        className={[
-                          'flex-1 flex items-center justify-center gap-2.5 rounded-full font-semibold text-sm transition-all duration-200 cursor-pointer disabled:cursor-not-allowed',
-                          stock
-                            ? 'bg-brand-red text-white hover:bg-brand-red-dark shadow-red-glow active:scale-[0.98]'
-                            : 'bg-dark-700 text-white/30 cursor-not-allowed',
-                        ].join(' ')}
-                      >
-                        <ShoppingBag size={17} />
-                        Agregar al Carrito
-                      </button>
-                    </div>
-
-                    {/* WhatsApp */}
-                    <a
-                      href={waLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2.5 w-full py-3.5 rounded-full border border-white/10 bg-dark-800/50 text-white/70 hover:text-white hover:border-white/20 hover:bg-dark-700/50 transition-all duration-200 text-sm font-medium"
+                {/* Selector de cantidad + Agregar al carrito */}
+                <div className="flex items-stretch gap-3">
+                  {/* Cantidad */}
+                  <div className="flex items-center border border-white/12 rounded-full bg-dark-800/60 overflow-hidden">
+                    <button
+                      onClick={() => setQty(q => Math.max(MIN_LB, q - PASO_LB))}
+                      disabled={qty <= MIN_LB}
+                      className="w-11 h-12 flex items-center justify-center text-white/50 hover:text-white disabled:text-white/20 transition-colors"
+                      aria-label="Reducir cantidad"
                     >
-                      <WhatsAppIcon className="w-4 h-4" />
-                      Consultar por WhatsApp
-                    </a>
-                  </>
-                )}
+                      <Minus size={15} />
+                    </button>
+                    <span className="w-16 h-12 flex items-center justify-center text-white font-semibold text-sm border-x border-white/10 whitespace-nowrap">
+                      {formatLb(qty)}
+                    </span>
+                    <button
+                      onClick={() => setQty(q => q + PASO_LB)}
+                      className="w-11 h-12 flex items-center justify-center text-white/50 hover:text-white transition-colors"
+                      aria-label="Aumentar cantidad"
+                    >
+                      <Plus size={15} />
+                    </button>
+                  </div>
+
+                  {/* Agregar al carrito */}
+                  <button
+                    onClick={handleAdd}
+                    disabled={!stock}
+                    className={[
+                      'flex-1 flex items-center justify-center gap-2.5 rounded-full font-semibold text-sm transition-all duration-200 cursor-pointer disabled:cursor-not-allowed',
+                      stock
+                        ? 'bg-brand-red text-white hover:bg-brand-red-dark shadow-red-glow active:scale-[0.98]'
+                        : 'bg-dark-700 text-white/30 cursor-not-allowed',
+                    ].join(' ')}
+                  >
+                    <ShoppingBag size={17} />
+                    Agregar al Carrito
+                  </button>
+                </div>
+
+                {/* WhatsApp */}
+                <a
+                  href={waLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2.5 w-full py-3.5 rounded-full border border-white/10 bg-dark-800/50 text-white/70 hover:text-white hover:border-white/20 hover:bg-dark-700/50 transition-all duration-200 text-sm font-medium"
+                >
+                  <WhatsAppIcon className="w-4 h-4" />
+                  Consultar por WhatsApp
+                </a>
               </div>
 
               {/* Compartir */}
@@ -461,64 +390,50 @@ export default function ProductoHero({
                 {currentImg && <Image src={currentImg} alt={nombre} fill sizes="48px" className="object-cover" />}
               </div>
 
-              {/* Nombre + precio */}
+              {/* Nombre + unidad */}
               <div className="flex-1 min-w-0">
                 <p className="text-white text-sm font-semibold truncate">{nombre}</p>
-                <p className="text-white/50 text-xs">{sinPrecio ? 'Consultar precio' : `$${precioFmt}`}</p>
+                <p className="text-white/50 text-xs">{UNIDAD_LARGA}</p>
               </div>
 
               {/* Qty + Add */}
               <div className="flex items-center gap-2">
-                {sinPrecio ? (
-                  <a
-                    href={waLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 bg-brand-red text-white px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-brand-red-dark transition-all shadow-red-glow active:scale-[0.98] whitespace-nowrap"
+                <div className="hidden sm:flex items-center border border-white/12 rounded-full bg-dark-900/50 overflow-hidden">
+                  <button
+                    onClick={() => setQty(q => Math.max(MIN_LB, q - PASO_LB))}
+                    className="w-8 h-9 flex items-center justify-center text-white/50 hover:text-white transition-colors"
                   >
-                    <MessageCircle size={15} />
-                    <span className="hidden xs:inline">WhatsApp</span>
-                  </a>
-                ) : (
-                  <>
-                    <div className="hidden sm:flex items-center border border-white/12 rounded-full bg-dark-900/50 overflow-hidden">
-                      <button
-                        onClick={() => setQty(q => Math.max(1, q - 1))}
-                        className="w-8 h-9 flex items-center justify-center text-white/50 hover:text-white transition-colors"
-                      >
-                        <Minus size={12} />
-                      </button>
-                      <span className="w-7 h-9 flex items-center justify-center text-white text-xs font-semibold border-x border-white/10">
-                        {qty}
-                      </span>
-                      <button
-                        onClick={() => setQty(q => q + 1)}
-                        className="w-8 h-9 flex items-center justify-center text-white/50 hover:text-white transition-colors"
-                      >
-                        <Plus size={12} />
-                      </button>
-                    </div>
+                    <Minus size={12} />
+                  </button>
+                  <span className="w-12 h-9 flex items-center justify-center text-white text-xs font-semibold border-x border-white/10 whitespace-nowrap">
+                    {formatLb(qty)}
+                  </span>
+                  <button
+                    onClick={() => setQty(q => q + PASO_LB)}
+                    className="w-8 h-9 flex items-center justify-center text-white/50 hover:text-white transition-colors"
+                  >
+                    <Plus size={12} />
+                  </button>
+                </div>
 
-                    <button
-                      onClick={handleAdd}
-                      disabled={!stock}
-                      className="flex items-center gap-2 bg-brand-red text-white px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-brand-red-dark transition-all shadow-red-glow active:scale-[0.98] whitespace-nowrap cursor-pointer disabled:cursor-not-allowed"
-                    >
-                      <ShoppingBag size={15} />
-                      <span className="hidden xs:inline">Agregar</span>
-                    </button>
+                <button
+                  onClick={handleAdd}
+                  disabled={!stock}
+                  className="flex items-center gap-2 bg-brand-red text-white px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-brand-red-dark transition-all shadow-red-glow active:scale-[0.98] whitespace-nowrap cursor-pointer disabled:cursor-not-allowed"
+                >
+                  <ShoppingBag size={15} />
+                  <span className="hidden xs:inline">Agregar</span>
+                </button>
 
-                    <a
-                      href={waLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center w-10 h-10 rounded-full border border-white/10 bg-dark-700/50 text-white/50 hover:text-white hover:border-white/25 transition-all"
-                      aria-label="Pedir por WhatsApp"
-                    >
-                      <WhatsAppIcon className="w-4 h-4" />
-                    </a>
-                  </>
-                )}
+                <a
+                  href={waLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center w-10 h-10 rounded-full border border-white/10 bg-dark-700/50 text-white/50 hover:text-white hover:border-white/25 transition-all"
+                  aria-label="Pedir por WhatsApp"
+                >
+                  <WhatsAppIcon className="w-4 h-4" />
+                </a>
               </div>
             </div>
           </div>

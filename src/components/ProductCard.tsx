@@ -5,13 +5,12 @@ import Image from 'next/image';
 import { ShoppingBag, Star } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import { badgeClase, nombreCategoria, getCategoria } from '@/lib/categorias';
-import { whatsappLink } from '@/lib/contacto';
+import { UNIDAD_CORTA, MIN_LB } from '@/lib/unidades';
 
 interface ProductCardProps {
   id: number;
   nombre: string;
   descripcion: string;
-  precio: number;
   imagen: string;
   categoria: string;
   peso: string;
@@ -19,15 +18,14 @@ interface ProductCardProps {
   destacado?: boolean;
 }
 
-export default function ProductCard({ id, nombre, descripcion, precio, imagen, categoria, peso, slug, destacado }: ProductCardProps) {
+export default function ProductCard({ id, nombre, descripcion, imagen, categoria, peso, slug, destacado }: ProductCardProps) {
   const { addItem, showNotification } = useCart();
   const badgeClass = badgeClase(categoria);
   const Icono = getCategoria(categoria)?.icono;
-  const sinPrecio = precio <= 0;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
-    addItem({ id, nombre, precio, imagen, peso, slug });
+    addItem({ id, nombre, imagen, peso, slug }, MIN_LB);
     showNotification(`${nombre} agregado al carrito`);
   };
 
@@ -71,33 +69,14 @@ export default function ProductCard({ id, nombre, descripcion, precio, imagen, c
         </Link>
         <p className="text-gray-500 text-sm mb-3 line-clamp-2">{descripcion}</p>
         <div className="flex items-center justify-between gap-3">
-          <div>
-            {sinPrecio ? (
-              <span className="text-sm font-semibold text-gray-500">Consultar precio</span>
-            ) : (
-              <span className="text-xl font-bold text-brand-red">${precio.toLocaleString('es-CO')}</span>
-            )}
-            <span className="text-gray-400 text-xs block">{peso}</span>
-          </div>
-          {sinPrecio ? (
-            <a
-              href={whatsappLink(`Hola, quiero consultar el precio de: ${nombre}`)}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={e => e.stopPropagation()}
-              className="flex items-center gap-1.5 bg-dark-800 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-dark-700 transition-all duration-300 whitespace-nowrap"
-            >
-              WhatsApp
-            </a>
-          ) : (
-            <button
-              onClick={handleAddToCart}
-              className="flex items-center gap-1.5 bg-brand-red text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-brand-red-dark transition-all duration-300 hover:shadow-red-glow cursor-pointer"
-            >
-              <ShoppingBag size={16} />
-              Agregar
-            </button>
-          )}
+          <span className="text-gray-400 text-xs">{UNIDAD_CORTA}</span>
+          <button
+            onClick={handleAddToCart}
+            className="flex items-center gap-1.5 bg-brand-red text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-brand-red-dark transition-all duration-300 hover:shadow-red-glow cursor-pointer"
+          >
+            <ShoppingBag size={16} />
+            Agregar
+          </button>
         </div>
       </div>
     </article>

@@ -2,10 +2,11 @@
 
 import { useEffect } from 'react';
 import { useCart } from '@/contexts/CartContext';
+import { formatLb } from '@/lib/unidades';
 
 export default function CartModal() {
   const { items, isOpen, toggleCart, updateQuantity, sendWhatsAppOrder } = useCart();
-  const total = items.reduce((t, i) => t + i.precio * i.cantidad, 0);
+  const totalLb = items.reduce((t, i) => t + i.cantidad, 0);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
@@ -54,8 +55,7 @@ export default function CartModal() {
                   <img src={item.imagen} alt={item.nombre} className="w-16 h-16 object-cover rounded-lg flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <h4 className="font-semibold text-gray-900 text-sm truncate">{item.nombre}</h4>
-                    <p className="text-xs text-gray-500">{item.peso}</p>
-                    <p className="text-brand-red font-bold text-sm">${item.precio.toLocaleString('es-CO')}</p>
+                    <p className="text-brand-red font-bold text-sm">{formatLb(item.cantidad)}</p>
                   </div>
                   <div className="flex items-center gap-1.5 flex-shrink-0">
                     <button
@@ -77,7 +77,7 @@ export default function CartModal() {
           <div className="border-t border-gray-100 p-6 bg-gray-50/80">
             <div className="flex items-center justify-between mb-4">
               <span className="text-gray-600 font-medium">Total:</span>
-              <span className="text-2xl font-bold text-brand-red">${total.toLocaleString('es-CO')}</span>
+              <span className="text-2xl font-bold text-brand-red">{formatLb(totalLb)}</span>
             </div>
             <div className="space-y-3">
               <button

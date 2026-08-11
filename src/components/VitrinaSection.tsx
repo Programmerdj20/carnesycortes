@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCart } from '@/contexts/CartContext';
 import type { Producto } from '@/lib/productos';
+import { UNIDAD_CORTA } from '@/lib/unidades';
 
 interface VitrinaSectionProps {
   tradicionales: Producto[];
@@ -41,7 +42,6 @@ function VitrinaCard({ producto, accent }: { producto: Producto; accent: 'red' |
     addItem({
       id: producto.id,
       nombre: producto.nombre,
-      precio: producto.precio,
       imagen: producto.imagen,
       peso: producto.peso,
       slug: producto.slug,
@@ -98,8 +98,8 @@ function VitrinaCard({ producto, accent }: { producto: Producto; accent: 'red' |
           {producto.descripcion}
         </p>
         <div className="flex items-center justify-between gap-3 mt-auto pt-3 border-t border-white/[0.10]">
-          <span className={`text-xl font-display font-bold tracking-tight ${isGold ? 'text-white' : 'text-brand-red-light'}`}>
-            ${producto.precio.toLocaleString('es-CO')}
+          <span className={`text-xs font-semibold uppercase tracking-wider ${isGold ? 'text-white/60' : 'text-white/50'}`}>
+            {UNIDAD_CORTA}
           </span>
           <button
             onClick={handleAdd}
