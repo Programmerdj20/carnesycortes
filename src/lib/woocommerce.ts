@@ -38,6 +38,8 @@ export interface WCProduct {
   price: string;
   regular_price: string;
   featured: boolean;
+  status: 'publish' | 'draft' | 'pending' | 'private' | 'future' | 'trash';
+  catalog_visibility: 'visible' | 'catalog' | 'search' | 'hidden';
   stock_status: 'instock' | 'outofstock' | 'onbackorder';
   images: WCImage[];
   categories: WCCategory[];
@@ -101,6 +103,14 @@ function getAuthHeader(): string {
   return 'Basic ' + Buffer.from(`${key}:${secret}`).toString('base64');
 }
 
+// WooCommerce corre en el mismo servidor que Next, así que refrescar cada
+// minuto es prácticamente gratis. Antes se usaba cache: 'force-cache' sin
+// revalidate (caché permanente): un producto pasado a borrador en WooCommerce
+// seguía sirviéndose desde el Data Cache indefinidamente hasta un rebuild
+// manual. El tag 'productos' permite además invalidar al instante vía
+// revalidateTag() desde un webhook (ver /api/revalidate).
+const REVALIDATE_SEGUNDOS = 60;
+
 async function wcFetch<T>(endpoint: string): Promise<T> {
   const base = process.env.WOOCOMMERCE_URL;
   if (!base) throw new Error('Falta la variable de entorno WOOCOMMERCE_URL en .env.local');
@@ -108,8 +118,7 @@ async function wcFetch<T>(endpoint: string): Promise<T> {
 
   const res = await fetch(url, {
     headers: { Authorization: getAuthHeader() },
-    // force-cache: Next.js deduplica durante el build y genera páginas estáticas
-    cache: 'force-cache',
+    next: { revalidate: REVALIDATE_SEGUNDOS, tags: ['productos'] },
   });
 
   if (!res.ok) {
@@ -117,6 +126,15 @@ async function wcFetch<T>(endpoint: string): Promise<T> {
   }
 
   return res.json() as Promise<T>;
+}
+
+// Red de seguridad: aunque cada endpoint ya pide status=publish, filtramos
+// aquí una última vez por si alguna consulta futura lo omite, y además
+// descartamos productos publicados pero ocultos del catálogo en WooCommerce.
+function soloPublicados(productos: WCProduct[]): WCProduct[] {
+  return productos.filter(
+    p => p.status === 'publish' && p.catalog_visibility !== 'hidden'
+  );
 }
 
 // ─── Helpers de mapeo ─────────────────────────────────────────────────────────
@@ -273,19 +291,21 @@ export function wcProductoToProducto(p: WCProduct) {
 // ─── Funciones públicas ───────────────────────────────────────────────────────
 
 export async function fetchProductos(): Promise<WCProduct[]> {
-  return wcFetch<WCProduct[]>('products?per_page=100&status=publish');
+  const productos = await wcFetch<WCProduct[]>('products?per_page=100&status=publish');
+  return soloPublicados(productos);
 }
 
 export async function fetchProductoBySlug(slug: string): Promise<WCProduct | undefined> {
   const productos = await wcFetch<WCProduct[]>(
     `products?slug=${encodeURIComponent(slug)}&status=publish`
   );
-  return productos[0];
+  return soloPublicados(productos)[0];
 }
 
 export async function fetchProductosByIds(ids: number[]): Promise<WCProduct[]> {
   if (!ids.length) return [];
-  return wcFetch<WCProduct[]>(
+  const productos = await wcFetch<WCProduct[]>(
     `products?include=${ids.join(',')}&status=publish&per_page=${ids.length}`
   );
+  return soloPublicados(productos);
 }
