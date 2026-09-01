@@ -113,11 +113,13 @@ const REVALIDATE_SEGUNDOS = 60;
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-// El sitio de WooCommerce ocasionalmente responde 500 de forma transitoria
-// (picos de carga en WP). Sin reintento, un solo fallo puntual durante
-// `next build` aborta la generación estática de TODAS las páginas.
-const REINTENTOS = 3;
-const ESPERA_MS = 1000;
+// WooCommerce vive en hosting compartido y, bajo la ráfaga de ~40 páginas
+// generándose en paralelo durante `next build`, PHP-FPM/MySQL saturan y
+// responden 500 durante varios segundos seguidos (no es un error puntual,
+// es presión sostenida). El backoff exponencial le da tiempo a la ráfaga
+// de pasar antes de rendirse.
+const REINTENTOS = 5;
+const ESPERA_BASE_MS = 1000;
 
 async function wcFetch<T>(endpoint: string): Promise<T> {
   const base = process.env.WOOCOMMERCE_URL;
@@ -140,7 +142,7 @@ async function wcFetch<T>(endpoint: string): Promise<T> {
     } catch (err) {
       if (intento === REINTENTOS) throw err;
     }
-    await sleep(ESPERA_MS * intento);
+    await sleep(ESPERA_BASE_MS * 2 ** (intento - 1));
   }
 
   throw new Error(`WooCommerce API: agotados los reintentos en ${url}`);

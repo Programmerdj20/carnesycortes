@@ -3,6 +3,14 @@ const nextConfig = {
   // Permite levantar un servidor de pruebas aislado (otro puerto + build dir)
   // sin pisar el .next del servidor de desarrollo principal del usuario.
   distDir: process.env.NEXT_DIST_DIR || '.next',
+
+  // WooCommerce corre en hosting compartido: generar las ~40 páginas de
+  // producto en paralelo satura PHP-FPM/MySQL y produce 500 intermitentes
+  // durante el build. Limitar a 2 workers reduce la ráfaga de peticiones
+  // concurrentes contra la API.
+  experimental: {
+    cpus: 2,
+  },
   images: {
     remotePatterns: [
       {
