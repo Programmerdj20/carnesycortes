@@ -103,8 +103,15 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
       }
     };
 
-    if (producto.related_ids.length > 0) {
-      agregar(await getProductosByIds(producto.related_ids));
+    // La consulta de related_ids es contenido decorativo: si WooCommerce falla
+    // aquí no debe tumbar la página completa (ni el build estático), solo
+    // degradar al resto de la cascada (misma categoría / animal / catálogo).
+    try {
+      if (producto.related_ids.length > 0) {
+        agregar(await getProductosByIds(producto.related_ids));
+      }
+    } catch (err) {
+      console.error(`No se pudieron cargar related_ids para "${producto.slug}":`, err);
     }
     agregar(todosLosProductos.filter(p => p.categoria === producto.categoria));
     agregar(todosLosProductos.filter(p => getCategoria(p.categoria)?.animal === categoriaInfo?.animal));

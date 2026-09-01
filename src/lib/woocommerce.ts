@@ -111,21 +111,39 @@ function getAuthHeader(): string {
 // revalidateTag() desde un webhook (ver /api/revalidate).
 const REVALIDATE_SEGUNDOS = 60;
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+// El sitio de WooCommerce ocasionalmente responde 500 de forma transitoria
+// (picos de carga en WP). Sin reintento, un solo fallo puntual durante
+// `next build` aborta la generación estática de TODAS las páginas.
+const REINTENTOS = 3;
+const ESPERA_MS = 1000;
+
 async function wcFetch<T>(endpoint: string): Promise<T> {
   const base = process.env.WOOCOMMERCE_URL;
   if (!base) throw new Error('Falta la variable de entorno WOOCOMMERCE_URL en .env.local');
   const url = `${base}/wp-json/wc/v3/${endpoint}`;
 
-  const res = await fetch(url, {
-    headers: { Authorization: getAuthHeader() },
-    next: { revalidate: REVALIDATE_SEGUNDOS, tags: ['productos'] },
-  });
+  for (let intento = 1; intento <= REINTENTOS; intento++) {
+    try {
+      const res = await fetch(url, {
+        headers: { Authorization: getAuthHeader() },
+        next: { revalidate: REVALIDATE_SEGUNDOS, tags: ['productos'] },
+      });
 
-  if (!res.ok) {
-    throw new Error(`WooCommerce API error ${res.status} en ${url}`);
+      if (res.ok) return res.json() as Promise<T>;
+
+      // Errores 4xx no se arreglan reintentando (URL/credenciales mal formadas).
+      if (res.status < 500 || intento === REINTENTOS) {
+        throw new Error(`WooCommerce API error ${res.status} en ${url}`);
+      }
+    } catch (err) {
+      if (intento === REINTENTOS) throw err;
+    }
+    await sleep(ESPERA_MS * intento);
   }
 
-  return res.json() as Promise<T>;
+  throw new Error(`WooCommerce API: agotados los reintentos en ${url}`);
 }
 
 // Red de seguridad: aunque cada endpoint ya pide status=publish, filtramos
