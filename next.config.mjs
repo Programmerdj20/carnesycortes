@@ -4,12 +4,13 @@ const nextConfig = {
   // sin pisar el .next del servidor de desarrollo principal del usuario.
   distDir: process.env.NEXT_DIST_DIR || '.next',
 
-  // WooCommerce corre en hosting compartido: generar las ~40 páginas de
-  // producto en paralelo satura PHP-FPM/MySQL y produce 500 intermitentes
-  // durante el build. Limitar a 2 workers reduce la ráfaga de peticiones
-  // concurrentes contra la API.
+  // WooCommerce corre en hosting compartido con PHP-FPM muy limitado: se
+  // comprobó que hasta 2 requests simultáneos ya lo tumban con 500. `cpus`
+  // reparte generateStaticParams entre procesos worker separados, así que
+  // la cola de src/lib/woocommerce.ts (que solo serializa dentro de un
+  // proceso) no alcanza por sí sola — hace falta forzar un único worker.
   experimental: {
-    cpus: 2,
+    cpus: 1,
   },
   images: {
     remotePatterns: [

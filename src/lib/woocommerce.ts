@@ -113,15 +113,27 @@ const REVALIDATE_SEGUNDOS = 60;
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-// WooCommerce vive en hosting compartido y, bajo la ráfaga de ~40 páginas
-// generándose en paralelo durante `next build`, PHP-FPM/MySQL saturan y
-// responden 500 durante varios segundos seguidos (no es un error puntual,
-// es presión sostenida). El backoff exponencial le da tiempo a la ráfaga
-// de pasar antes de rendirse.
+// WooCommerce vive en hosting compartido (PHP-FPM con muy pocos workers para
+// ese vhost). Se comprobó que incluso 2 requests simultáneos ya lo tumban con
+// 500, mientras que en serie decenas de requests seguidos nunca fallan. Por
+// eso la defensa real es esta cola: nunca dejar salir más de una petición a
+// la vez, sin importar cuánto paralelice `next build` la generación estática.
+// Los reintentos con backoff son solo una red de seguridad adicional.
+let colaWc: Promise<void> = Promise.resolve();
+function encolar<T>(tarea: () => Promise<T>): Promise<T> {
+  const resultado = colaWc.then(tarea, tarea);
+  colaWc = resultado.then(() => undefined, () => undefined);
+  return resultado;
+}
+
 const REINTENTOS = 5;
 const ESPERA_BASE_MS = 1000;
 
 async function wcFetch<T>(endpoint: string): Promise<T> {
+  return encolar(() => wcFetchIntentos<T>(endpoint));
+}
+
+async function wcFetchIntentos<T>(endpoint: string): Promise<T> {
   const base = process.env.WOOCOMMERCE_URL;
   if (!base) throw new Error('Falta la variable de entorno WOOCOMMERCE_URL en .env.local');
   const url = `${base}/wp-json/wc/v3/${endpoint}`;
